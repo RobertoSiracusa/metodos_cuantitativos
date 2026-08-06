@@ -1,22 +1,18 @@
 from dataclasses import dataclass
-from typing import Union
-from src.utils.validators import validate_positive_rate, validate_stable_system
+
+from src.core.mmc_model import MMCModel
+from src.utils.validators import validate_stable_system
 
 
 @dataclass
-class MM1Model:
+class MM1Model(MMCModel):
     """Modelo M/M/1 para cálculos de teoría de colas."""
-    lamb: float
-    mu: float
+
+    servers: int = 1
 
     def __post_init__(self):
-        validate_positive_rate(self.lamb, 'lambda')
-        validate_positive_rate(self.mu, 'mu')
-        validate_stable_system(self.lamb, self.mu)
-
-    @property
-    def rho(self) -> float:
-        return self.lamb / self.mu
+        super().__post_init__()
+        validate_stable_system(self.lamb, self.mu, self.servers)
 
     @property
     def p0(self) -> float:
@@ -35,12 +31,12 @@ class MM1Model:
 
     @property
     def w(self) -> float:
-        # Tiempo promedio en el sistema (minutos)
+        # Tiempo promedio en el sistema
         return 1.0 / (self.mu - self.lamb)
 
     @property
     def wq(self) -> float:
-        # Tiempo promedio en la cola (minutos)
+        # Tiempo promedio en la cola
         return self.lamb / (self.mu * (self.mu - self.lamb))
 
     def prob_more_than(self, k: int) -> float:
