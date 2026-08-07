@@ -78,6 +78,23 @@ Wq (tiempo en cola): 0.233415
 Pw (Erlang-C): 0.702247
 ```
 
+Salida esperada para el Ejercicio 1:
+
+```text
+M/M/1 - Resultados detallados
+--------------------------------
+Lambda (llegadas/min): 0.500000
+Mu (servicios/min): 1.200000
+Servidores: 1.000000
+Rho (utilizacion): 0.416667  rho = lambda / (c * mu)
+P0 (sistema vacío): 0.583333
+L (en sistema): 0.714286
+Lq (en cola): 0.297619
+W (tiempo en sistema): 1.428571
+Wq (tiempo en cola): 0.595238
+P(n>k) para k=5: 0.416667^6 = 0.004771
+```
+
 Nota: el reporte también muestra el tiempo en horas y su equivalente en minutos en la salida compacta del servicio.
 
 **Comandos a usar**
