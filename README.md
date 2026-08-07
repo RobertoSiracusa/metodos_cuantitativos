@@ -63,7 +63,4 @@ pytest
 - Mantener tests que permitan verificar los resultados numéricos y evitar regresiones.
 - Si agregas dependencias, registra un `requirements.txt` o `pyproject.toml` dentro de la tarea.
 
-Si quieres, puedo:
 
-- Crear una plantilla `tarea_template/` con la estructura recomendada y un `cookiecutter` simple.
-- Añadir instrucciones de contribución o un `CONTRIBUTING.md`.
