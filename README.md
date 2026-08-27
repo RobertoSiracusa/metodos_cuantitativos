@@ -1,66 +1,99 @@
-
 # Métodos Cuantitativos — Repositorio
 
-Este repositorio agrupa tareas del curso de Métodos Cuantitativos. Cada tarea se colocará en su propia carpeta (`tarea1/`, `tarea2/`, ...) y contendrá el código, tests y documentación necesarios para reproducir los ejercicios.
+**Universidad José Antonio Páez — Facultad de Ingeniería**  
+**Escuela de Ingeniería en Computación — Métodos Cuantitativos**
 
-## Organización y convención de carpetas
+Este repositorio agrupa las tareas y proyectos prácticos desarrollados durante el curso de Métodos Cuantitativos. Cada tarea se encuentra aislada en su respectiva carpeta (`tarea1/`, `tarea2/`, `parcial1/`) y contiene la implementación en Python bajo el paradigma de Programación Orientada a Objetos (POO), suites de pruebas unitarias automatizadas (`pytest`) y documentación técnica.
 
-- `tareaN/` — Carpeta por cada tarea (N = 1, 2, ...). Cada `tareaN` puede incluir subcarpetas con implementaciones, datos y documentación.
-- Dentro de cada `tarea` se recomienda la siguiente estructura mínima:
-  - `calculator/` o `src/` — Código de la tarea (módulos, scripts ejecutables).
-  - `tests/` — Pruebas unitarias relacionadas con la tarea.
-  - `README.md` — Documentación específica de la tarea (cómo ejecutar, parámetros, resultados esperados).
+---
 
-## Convención para añadir nuevas tareas
+## Organización del Repositorio
 
-1. Crear una carpeta `tareaX/` en la raíz del repositorio.
-2. Incluir el código en una subcarpeta (por ejemplo `calculator/` o `src/`).
-3. Añadir tests en `tareaX/tests/` para validar el resultado.
-4. Agregar un `README.md` dentro de `tareaX` explicando el objetivo, los datos usados y cómo ejecutar.
+```text
+metodos_cuantitativos/
+│
+├── tarea1/                             # Tarea 1: Teoría de Líneas de Espera / Colas
+│   ├── calculator/
+│   │   ├── main.py                     # CLI ejecutable
+│   │   ├── src/                        # Modelos M/M/1, M/M/c, M/G/1, M/D/1
+│   │   ├── tests/                      # Tests unitarios con pytest
+│   │   └── README.md                   # Documentación específica de Tarea 1
+│   └── Tarea I ...pdf                  # Pauta oficial de la tarea
+│
+├── tarea2/                             # Tarea 2: Teoría de Inventarios
+│   ├── main.py                         # Punto de entrada principal (GUI Tkinter)
+│   ├── src/                            # Arquitectura Top-Down: core, gui, services
+│   ├── outputs/                        # Reportes de texto (.txt) oficiales generados
+│   ├── tests/                          # Tests unitarios con pytest (19 tests)
+│   ├── Guia de Problemas ...pdf        # Guía de problemas del curso
+│   ├── Segunda tarea ...pdf            # Pauta oficial de la tarea
+│   └── README.md                   # Documentación específica de Tarea 2
+│
+├── parcial1/                           # Evaluaciones y respuestas del Parcial I
+│
+└── README.md                           # Documentación general del repositorio
+```
 
-Esto permite mantener el repositorio ordenado y facilita que cada tarea sea autocontenida.
+---
 
-## Ejemplo: `tarea1`
+## Contenido de las Tareas
 
-`tarea1` contiene la implementación de una calculadora orientada a objetos para teoría de colas (modelos M/M/1 y M/M/c). Puntos clave:
+### Tarea 1 — Teoría de Líneas de Espera (Colas)
+Implementa una calculadora orientada a objetos para análisis de sistemas de colas con llegadas Poisson:
+* **Modelos soportados:** $M/M/1$, $M/M/c$, $M/G/1$, $M/G/c$, $M/D/1$, $M/D/c$.
+* **Métricas calculadas:** Factor de utilización ($\rho$), probabilidad de sistema vacío ($P_0$), número esperado en cola/sistema ($L_q$, $L$), tiempos de espera promedio ($W_q$, $W$) y probabilidad de espera Erlang-C ($P_w$).
+* **Ubicación:** `tarea1/calculator/`
 
-- CLI: `tarea1/calculator/main.py` — Ejecuta los ejercicios y muestra resultados por pantalla.
-- Modelos: `tarea1/calculator/src/core/mm1_model.py` y `tarea1/calculator/src/core/mmc_model.py`.
-- Reportes: `tarea1/calculator/src/services/reporter.py`.
-- Validaciones: `tarea1/calculator/src/utils/validators.py`.
-- Tests: `tarea1/calculator/tests/test_mmc_model.py` (valida métricas M/M/c con datos de ejemplo).
+### Tarea 2 — Teoría de Inventarios (Modelos de Decisión y Optimización)
+Implementa una aplicación con arquitectura modular Top-Down Design e interfaz gráfica en Tkinter (tema Slate & Blue) para la optimización de inventarios:
+* **Modelos implementados:**
+  1. **EOQ Clásico:** Lote económico determinístico, frecuencia $T = Q/D$, número de pedidos $N$ y desglose de costos.
+  2. **Modelo Probabilístico:** Demanda variable bajo distribución normal, stock de seguridad ($SS = Z \cdot \sigma_L$), punto de reorden ($ROP$) y costos operacionales relevantes.
+  3. **Quiebre de Inventario:** Descuentos por volumen por tramos de precio, ajuste de factibilidad y análisis cuantitativo de trade-off de costos.
+  4. **Multi-Artículo con Restricciones:** Optimización simultánea con límites de espacio/área física y presupuesto financiero mediante Multiplicadores de Lagrange (exacto y aproximación clásica de Taha).
+* **Exportación de reportes:** Generación de archivos `.txt` en `tarea2/outputs/` con diagnósticos e interpretaciones económicas de decisión.
+* **Ubicación:** `tarea2/`
 
-Datos de ejemplo usados en `tarea1`:
+---
 
-- Ejercicio 1 (M/M/1): `lambda=0.8`, `mu=1.0`, `k=3`.
-- Ejercicio 2 (M/M/c): `lambda=15.0`, `mu=6.0`, `servers=3`.
+## Instrucciones de Ejecución
 
-## Cómo ejecutar una tarea
+### Ejecutar Tarea 1 (Líneas de Espera - CLI)
 
-Desde la raíz del repositorio, por ejemplo para `tarea1`:
-
+Desde la raíz del repositorio:
 ```bash
 cd tarea1/calculator
 python main.py --exercise 2 --servers 3 --lambda 15.0 --mu 6.0
 ```
 
-O bien ejecutar desde la raíz como módulo si prefieres el modo `-m`:
-
-```bash
-python -m calculator.main
-```
-
-## Ejecutar pruebas
-
+O en modo interactivo:
 ```bash
 cd tarea1/calculator
-pytest
+python main.py --exercise 1
 ```
 
-## Buenas prácticas y notas
+### Ejecutar Tarea 2 (Teoría de Inventarios - GUI)
 
-- Cada tarea debe ser autocontenida y documentada en su propio `README.md`.
-- Mantener tests que permitan verificar los resultados numéricos y evitar regresiones.
-- Si agregas dependencias, registra un `requirements.txt` o `pyproject.toml` dentro de la tarea.
+Desde la raíz del repositorio:
+```bash
+cd tarea2
+python main.py
+```
 
+---
 
+## Ejecución de Pruebas Unitarias
+
+Cada tarea cuenta con su propia suite de pruebas automatizadas con `pytest`:
+
+### Pruebas de Tarea 1
+```bash
+cd tarea1/calculator
+pytest tests/ -v
+```
+
+### Pruebas de Tarea 2
+```bash
+cd tarea2
+pytest tests/ -v
+```
