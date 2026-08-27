@@ -1,0 +1,70 @@
+==================================================
+   REPORTE DE INVENTARIO: QUIEBRE DE PRECIOS
+==================================================
+Parámetros de Entrada:
+ - Demanda Anual (D): 5000.00 unidades
+ - Costo de Pedido (S/K): $49.00
+ - Costo Almacenaje Anual (%): 20.00%
+
+Desglose de Tramos:
+ Tramo 1 [0 a 999] @ $5.00/unidad:
+   * EOQ Teórico: 700.00
+   * Estado: Factible (EOQ en rango)
+   * Cantidad Ajustada: 700.00
+   * Costo Anual de Pedidos: $350.00
+   * Costo Anual de Almacenamiento: $350.00
+   * Costo Anual de Adquisición: $25000.00
+   * Costo Anual Total: $25700.00
+
+ Tramo 2 [1000 a 1999] @ $4.80/unidad:
+   * EOQ Teórico: 714.43
+   * Estado: Ajustado al Límite Inferior
+   * Cantidad Ajustada: 1000.00
+   * Costo Anual de Pedidos: $245.00
+   * Costo Anual de Almacenamiento: $480.00
+   * Costo Anual de Adquisición: $24000.00
+   * Costo Anual Total: $24725.00
+
+ Tramo 3 [2000 a inf] @ $4.75/unidad:
+   * EOQ Teórico: 718.18
+   * Estado: Ajustado al Límite Inferior
+   * Cantidad Ajustada: 2000.00
+   * Costo Anual de Pedidos: $122.50
+   * Costo Anual de Almacenamiento: $950.00
+   * Costo Anual de Adquisición: $23750.00
+   * Costo Anual Total: $24822.50
+
+==================================================
+                 ÓPTIMO RECOMENDADO
+==================================================
+ - Cantidad Óptima a Ordenar (Q*): 1000.00 unidades
+ - Tramo Óptimo: Tramo 2
+ - Precio Aplicable: $4.80/unidad
+ - Costo Mínimo Total Anual: $24725.00
+==================================================
+       INTERPRETACIÓN Y ANÁLISIS DE DECISIÓN
+==================================================
+1. Conclusión General:
+   El Tramo 2 es la alternativa económicamente óptima con un lote de 1000.00 unidades
+   a un precio de $4.80/unidad, logrando el Costo Total Anual mínimo de $24725.00.
+   Se recomienda realizar 5.00 pedidos al año para cubrir la demanda total de 5000 unidades.
+
+2. Comparativa Cuantitativa de Optimalidad entre Tramos:
+   * Frente al Tramo 1 (Costo: $25700.00):
+     - El Tramo 2 genera un ahorro anual de $975.00 (3.79% de ahorro neto).
+     - Operar en el Tramo 1 resultaría un 3.94% más costoso que la solución óptima.
+   * Frente al Tramo 3 (Costo: $24822.50):
+     - El Tramo 2 genera un ahorro anual de $97.50 (0.39% de ahorro neto).
+     - Operar en el Tramo 3 resultaría un 0.39% más costoso que la solución óptima.
+
+3. Análisis Económico del Trade-Off (Costo de Pedido vs Almacenamiento vs Adquisición):
+   * Tramo 1 vs Tramo Óptimo 2:
+     Aunque en el Tramo 1 el costo de almacenamiento es menor por ordenar menos unidades,
+     el descuento por volumen del Tramo 2 ahorra $1000.00 en adquisición
+     y $105.00 en pedidos, compensando con creces el incremento de $130.00 en almacenamiento.
+   * Tramo 3 vs Tramo Óptimo 2:
+     Aunque el Tramo 3 ofrece un precio unitario menor ($4.75 vs $4.80),
+     exige ordenar un lote muy elevado (2000.00 unidades) para acceder al descuento,
+     lo que incrementa el costo de almacenamiento en $470.00. Dicho costo de posesión
+     supera el ahorro conjunto en compra ($250.00) y pedidos ($122.50), haciendo que el Tramo 3 sea menos conveniente.
+==================================================

@@ -1,0 +1,31 @@
+==================================================
+   REPORTE DE INVENTARIO: MODELO PROBABILÍSTICO
+==================================================
+Parámetros de Entrada:
+ - Demanda Promedio Diaria (d): 200.00 unidades/día
+ - Desviación Estándar diaria (σd): 150.00 unidades
+ - Tiempo de Entrega (L): 4 días
+ - Nivel de Servicio Deseado (ns): 95.0%
+ - Método Valor Z: Tabla estándar (Libros de texto) -> Z = 1.6500
+ - Costo por Pedido (S): $20.00
+ - Costo Unitario del Producto (C): $10.00
+ - Porcentaje Mantenimiento Anual (i%): 20.00%
+ - Días Hábiles al Año (N): 250 días
+
+Resultados del Análisis:
+ - Demanda Anual Estimada (D): 50000 unidades/año
+ - Costo Almacenaje Anual Unitario (H): $2.00/unidad/año
+ - Cantidad Económica de Pedido (EOQ/Q*): 1000.00 unidades
+ - Demanda Promedio en Tiempo de Entrega (dL): 800.00 unidades
+ - Desviación Estándar en T. Entrega (σL): 300.00 unidades
+ - Stock de Seguridad (ss): 495.00 unidades
+ - Punto de Reorden (ROP / R): 1295.00 unidades
+ - Frecuencia de Pedidos: 50.00 pedidos/año (cada 5.00 días hábiles)
+
+Desglose de Costos Anuales Relevantes:
+ - Costo Anual de Realizar Pedidos: $1000.00
+ - Costo Mantenimiento de Ciclo (Q/2 * H): $1000.00
+ - Costo Mantenimiento Stock Seguridad (ss * H): $990.00
+ - Costo Total de Almacenamiento: $1990.00
+ - Costo Anual Relevante Total: $2990.00
+==================================================
