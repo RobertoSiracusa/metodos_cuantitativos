@@ -1,0 +1,61 @@
+==================================================
+   REPORTE DE INVENTARIO: MULTI-ARTICULO CON REST.
+==================================================
+Parametros Globales:
+ - Presupuesto Maximo ($): $8000.00
+ - Capacidad Almacenamiento (Area / Q Max): 700.00 m2 (o unidades)
+ - Metodo Utilizado: Multiplicadores de Lagrange (Exacto)
+ - Estado de Solucion: Optimal (Sin restricciones activas)
+ - Diagnostico: Los lotes EOQ cumplen todas las capacidades y presupuesto sin requerir ajustes. (Factor Ajuste: 1.0000)
+
+Detalles por Articulo:
+--------------------------------------------------
+ Articulo A:
+   * Demanda Anual (D): 3600 unidades
+   * Costo Pedido (S/Cp): $30.00
+   * Costo Almacenaje (H/Cm): $5.00
+   * Area Unit. (a): 1.00 m2
+   * EOQ Clasico sin restriccion: 207.85
+   * Cantidad Optima Ajustada (Q*): 207.85
+   * Punto de Reorden (ROP): 30.00 unidades
+
+ Articulo B:
+   * Demanda Anual (D): 3000 unidades
+   * Costo Pedido (S/Cp): $35.00
+   * Costo Almacenaje (H/Cm): $6.00
+   * Area Unit. (a): 1.00 m2
+   * EOQ Clasico sin restriccion: 187.08
+   * Cantidad Optima Ajustada (Q*): 187.08
+   * Punto de Reorden (ROP): 32.00 unidades
+
+ Articulo C:
+   * Demanda Anual (D): 4800 unidades
+   * Costo Pedido (S/Cp): $40.00
+   * Costo Almacenaje (H/Cm): $7.00
+   * Area Unit. (a): 1.00 m2
+   * EOQ Clasico sin restriccion: 234.22
+   * Cantidad Optima Ajustada (Q*): 234.22
+   * Punto de Reorden (ROP): 75.00 unidades
+
+==================================================
+                RESUMEN DE USO
+==================================================
+ - Presupuesto Utilizado: $3801.24 de $8000.00
+ - Espacio Almacenamiento Utilizado: 629.14 de 700.00 m2
+ - Costo Total de Almacenamiento Anual: $1900.62
+ - Costo Total de Pedidos Anual: $1900.62
+ - Costo Total Anual Optimizado: $3801.24
+==================================================
+       INTERPRETACION Y ANALISIS DE DECISION
+==================================================
+1. Diagnostico de Restricciones y Holguras:
+   - Los lotes economicos (EOQ) operan con holgura completa sin violar ninguna restriccion:
+     * Espacio utilizado: 629.14 m2 de 700.00 m2 (89.88% ocupado | 70.86 m2 libres / 10.12% de holgura).
+     * Presupuesto utilizado: $3801.24 de $8000.00 (47.52% utilizado | $4198.76 disponibles / 52.48% de holgura).
+   - La solucion obtenida es 100% optima a nivel global (Multiplicador de Lagrange lambda = 0.0000), sin sobrecosto ni penalizacion por capacidad o presupuesto.
+
+2. Resumen Operativo de Politicas de Inventario por Articulo:
+   * Articulo A: Ordenar lotes de 207.85 unidades cada 0.69 meses (17.32 pedidos/ano). Punto de Reorden (ROP): 30.00 unidades.
+   * Articulo B: Ordenar lotes de 187.08 unidades cada 0.75 meses (16.04 pedidos/ano). Punto de Reorden (ROP): 32.00 unidades.
+   * Articulo C: Ordenar lotes de 234.22 unidades cada 0.59 meses (20.49 pedidos/ano). Punto de Reorden (ROP): 75.00 unidades.
+==================================================

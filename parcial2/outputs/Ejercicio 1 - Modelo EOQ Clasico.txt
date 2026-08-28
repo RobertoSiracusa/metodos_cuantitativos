@@ -1,0 +1,31 @@
+==================================================
+   REPORTE DE INVENTARIO: MODELO EOQ CLASICO
+==================================================
+Parametros de Entrada:
+ - Demanda (Anual): 6000.00 unidades
+ - Demanda Anualizada (D): 6000.00 unidades/ano
+ - Costo de Pedido (S/K): $50.00
+ - Tasa de Mantenimiento Anual (i%): 20.00%
+ - Costo de Mantenimiento Unitario (H): $4.00/unidad/ano
+ - Costo Unitario del Producto (C): $20.00
+
+Resultados del Calculo:
+ - Cantidad Economica de Pedido (EOQ / Q*): 387.30 unidades
+ - Numero de Pedidos al Ano (N): 15.49 pedidos/ano
+ - Frecuencia entre Pedidos (T = Q/D): 0.77 meses (0.0645 anos)
+
+Desglose de Costos Anuales:
+ - Costo de Pedidos: $774.60
+ - Costo de Almacenamiento: $774.60
+ - Costo de Adquisicion (Producto): $120000.00
+ - Costo Total Anual (CT): $121549.19
+==================================================
+Respuestas Especificas a los Literales del Examen:
+--------------------------------------------------
+ a) Cantidad Optima de Pedido (EOQ): 387.30 unidades
+ b) Punto de Reorden (ROP = d * L = 20 * 5): 100.00 unidades
+ c) Costo Total Anual del Sistema (solo pedidos + mantenimiento): $1549.19
+    (Costo Total incluyendo adquisicion: $121549.19)
+ d) Numero de Pedidos al Ano (N = D / Q*): 15.49 pedidos/ano
+    (Frecuencia: cada 0.77 meses o 23.2 dias)
+==================================================

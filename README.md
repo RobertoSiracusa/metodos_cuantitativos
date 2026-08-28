@@ -28,8 +28,14 @@ metodos_cuantitativos/
 │   ├── Guia de Problemas ...pdf        # Guía de problemas del curso
 │   ├── Segunda tarea ...pdf            # Pauta oficial de la tarea
 │   └── README.md                   # Documentación específica de Tarea 2
-│
 ├── parcial1/                           # Evaluaciones y respuestas del Parcial I
+├── parcial2/                           # Evaluaciones, calculadora y respuestas del Parcial II (Inventarios)
+│   ├── main.py                         # Punto de entrada (GUI interactiva / CLI examen)
+│   ├── src/                            # Arquitectura modular Top-Down de inventarios (reutilizada de Tarea 2)
+│   ├── outputs/                        # Salidas .txt oficiales (3 ejercicios)
+│   ├── respuestaPregunta1.md           # Respuesta escrita Ejercicio 1 (EOQ)
+│   ├── respuestaPregunta2.md           # Respuesta escrita Ejercicio 2 (Quiebre de precios)
+│   └── respuestaPregunta3.md           # Respuesta escrita Ejercicio 3 (Restricciones)
 │
 └── README.md                           # Documentación general del repositorio
 ```

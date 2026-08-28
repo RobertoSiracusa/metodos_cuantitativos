@@ -1,0 +1,85 @@
+==================================================
+   REPORTE DE INVENTARIO: QUIEBRE DE PRECIOS
+==================================================
+Parametros de Entrada:
+ - Demanda Anual (D): 10000.00 unidades
+ - Costo de Pedido (S/K): $100.00
+ - Costo Almacenaje Anual (%): 25.00%
+
+Desglose de Tramos:
+ Tramo 1 [0 a 999] @ $10.00/unidad:
+   * EOQ Teorico: 894.43
+   * Estado: Factible (EOQ en rango)
+   * Cantidad Ajustada: 894.43
+   * Costo Anual de Pedidos: $1118.03
+   * Costo Anual de Almacenamiento: $1118.03
+   * Costo Anual de Adquisicion: $100000.00
+   * Costo Anual Total: $102236.07
+
+ Tramo 2 [1000 a 1999] @ $9.70/unidad:
+   * EOQ Teorico: 908.15
+   * Estado: Ajustado al Limite Inferior
+   * Cantidad Ajustada: 1000.00
+   * Costo Anual de Pedidos: $1000.00
+   * Costo Anual de Almacenamiento: $1212.50
+   * Costo Anual de Adquisicion: $97000.00
+   * Costo Anual Total: $99212.50
+
+ Tramo 3 [2000 a 2999] @ $9.50/unidad:
+   * EOQ Teorico: 917.66
+   * Estado: Ajustado al Limite Inferior
+   * Cantidad Ajustada: 2000.00
+   * Costo Anual de Pedidos: $500.00
+   * Costo Anual de Almacenamiento: $2375.00
+   * Costo Anual de Adquisicion: $95000.00
+   * Costo Anual Total: $97875.00
+
+ Tramo 4 [3000 a inf] @ $9.30/unidad:
+   * EOQ Teorico: 927.48
+   * Estado: Ajustado al Limite Inferior
+   * Cantidad Ajustada: 3000.00
+   * Costo Anual de Pedidos: $333.33
+   * Costo Anual de Almacenamiento: $3487.50
+   * Costo Anual de Adquisicion: $93000.00
+   * Costo Anual Total: $96820.83
+
+==================================================
+                 OPTIMO RECOMENDADO
+==================================================
+ - Cantidad Optima a Ordenar (Q*): 3000.00 unidades
+ - Tramo Optimo: Tramo 4
+ - Precio Aplicable: $9.30/unidad
+ - Costo Minimo Total Anual: $96820.83
+==================================================
+       INTERPRETACION Y ANALISIS DE DECISION
+==================================================
+1. Conclusion General:
+   El Tramo 4 es la alternativa economicamente optima con un lote de 3000.00 unidades
+   a un precio de $9.30/unidad, logrando el Costo Total Anual minimo de $96820.83.
+   Se recomienda realizar 3.33 pedidos al ano para cubrir la demanda total de 10000 unidades.
+
+2. Comparativa Cuantitativa de Optimalidad entre Tramos:
+   * Frente al Tramo 1 (Costo: $102236.07):
+     - El Tramo 4 genera un ahorro anual de $5415.23 (5.30% de ahorro neto).
+     - Operar en el Tramo 1 resultaria un 5.59% mas costoso que la solucion optima.
+   * Frente al Tramo 2 (Costo: $99212.50):
+     - El Tramo 4 genera un ahorro anual de $2391.67 (2.41% de ahorro neto).
+     - Operar en el Tramo 2 resultaria un 2.47% mas costoso que la solucion optima.
+   * Frente al Tramo 3 (Costo: $97875.00):
+     - El Tramo 4 genera un ahorro anual de $1054.17 (1.08% de ahorro neto).
+     - Operar en el Tramo 3 resultaria un 1.09% mas costoso que la solucion optima.
+
+3. Analisis Economico del Trade-Off (Costo de Pedido vs Almacenamiento vs Adquisicion):
+   * Tramo 1 vs Tramo Optimo 4:
+     Aunque en el Tramo 1 el costo de almacenamiento es menor por ordenar menos unidades,
+     el descuento por volumen del Tramo 4 ahorra $7000.00 en adquisicion
+     y $784.70 en pedidos, compensando con creces el incremento de $2369.47 en almacenamiento.
+   * Tramo 2 vs Tramo Optimo 4:
+     Aunque en el Tramo 2 el costo de almacenamiento es menor por ordenar menos unidades,
+     el descuento por volumen del Tramo 4 ahorra $4000.00 en adquisicion
+     y $666.67 en pedidos, compensando con creces el incremento de $2275.00 en almacenamiento.
+   * Tramo 3 vs Tramo Optimo 4:
+     Aunque en el Tramo 3 el costo de almacenamiento es menor por ordenar menos unidades,
+     el descuento por volumen del Tramo 4 ahorra $2000.00 en adquisicion
+     y $166.67 en pedidos, compensando con creces el incremento de $1112.50 en almacenamiento.
+==================================================
