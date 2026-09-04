@@ -48,6 +48,24 @@ metodos_cuantitativos/
 │   ├── tests/                          # Tests unitarios con pytest (10 tests)
 │   └── README.md                       # Documentacion tecnica y fundamentos M/M/c
 │
+├── automercado/                        # Simulacion de Linea de Espera: Automercado M/M/c y c x M/M/1 (SimPy + Pygame)
+│   ├── main.py                         # Punto de entrada interactivo y CLI
+│   ├── src/                            # Arquitectura POO: models, simulation, view, engine
+│   ├── tests/                          # Tests unitarios con pytest (12 tests)
+│   └── README.md                       # Documentacion tecnica, teoria de colas y ejecucion
+│
+├── transporte/                         # Optimizacion de Redes de Transporte & Flota (Dijkstra + A* + Pygame)
+│   ├── main.py                         # Punto de entrada interactivo y CLI
+│   ├── src/                            # Arquitectura POO: models, simulation, view, engine
+│   ├── tests/                          # Tests unitarios con pytest (12 tests)
+│   └── README.md                       # Documentacion tecnica, grafos y ejecucion
+│
+├── nuclear/                            # Simulacion de Reaccion Nuclear y Dinamica de Reactor (SimPy + Pygame)
+│   ├── main.py                         # Punto de entrada interactivo y CLI
+│   ├── src/                            # Arquitectura POO: models, simulation, view, engine
+│   ├── tests/                          # Tests unitarios con pytest (11 tests)
+│   └── README.md                       # Documentacion tecnica, fisica neutronica y manual
+│
 └── README.md                           # Documentación general del repositorio
 ```
 
@@ -83,6 +101,27 @@ Implementa un modelo estocástico de atención de combustible bajo la teoría de
 * **Motor SimPy:** Llegadas Poisson ($\lambda$), tiempos de servicio exponenciales ($\mu$), surtidores paralelos ($c=3$), tanque de almacenamiento y cisterna de reabastecimiento.
 * **Motor Pygame Top-Down:** Animación cenital de vehículos, islas de bombas con LEDs de estado, mangueras activas, cola física delimitada y tablero HUD con contraste analítico (teórico vs simulado).
 * **Ubicación:** `estacion/`
+
+### Automercado — Líneas de Espera M/M/c vs c x M/M/1 (SimPy + Pygame)
+Implementa un modelo estocástico de atención en batería de cajas registradoras con carritos de compra y vista cenital interactiva:
+* **Motor SimPy:** Llegadas Poisson ($\lambda$), tiempos de servicio exponenciales ($\mu$), cajas paralelas ($c=1..5$), recorrido de compras por góndolas, escaneo progresivo láser y pago.
+* **Disciplinas de Cola Soportadas:** Comparación interactiva en vivo entre **Cola Única Centralizada ($M/M/c$)** y **Colas Paralelas ($c \times M/M/1$)**, demostrando analítica y empíricamente la reducción drástica de tiempos de espera en fila única.
+* **Motor Pygame Top-Down:** Animación cenital de clientes con carritos, pasillos con 6 departamentos, cajas con cintas transportadoras, LEDs de estado, molinetes y HUD de telemetría en vivo.
+* **Ubicación:** `automercado/`
+
+### Transporte — Optimización de Redes y Asignación de Flota (Dijkstra, A* + Pygame)
+Implementa un modelo de investigación de operaciones para la resolución del problema de la ruta más corta (Shortest Path) y despacho de flota de camiones:
+* **Algoritmos de Redes:** Cálculo exacto de rutas de mínimo costo mediante **Dijkstra** y búsqueda heurística informada mediante **$A^*$**, con cálculo comparativo de ahorro frente a rutas alternativas.
+* **Modelo de Flota:** Asignación óptima de camiones según restricciones de capacidad, minimización de costos de reposición y traslado de carga.
+* **Motor Pygame Top-Down:** Animación 2D de carreteras, selección interactiva de nodos (origen y destino) por clic, visualización de rutas óptimas iluminadas (cyan neón) y telemetría HUD en vivo.
+* **Ubicación:** `transporte/`
+
+### Reactor Nuclear — Reacción en Cadena y Dinámica de Reactor (SimPy + Pygame)
+Implementa un modelo estocástico de cinética neutrónica y termohidráulica de un reactor nuclear con vista cenital interactiva:
+* **Motor SimPy:** Transporte de neutrones, fisiones en $^{235}\text{U}$, captura parasitaria en barras de control, moderación elástica en agua ligera, decaimiento de precursores con neutrones retardados ($\beta$) y balance térmico.
+* **Control y Seguridad Intrínseca:** Regulación de reactividad mediante barras de control móviles (Boro/Cadmio), sistema SCRAM de parada rápida de emergencia y coeficiente de temperatura Doppler negativo de seguridad pasiva.
+* **Motor Pygame Top-Down:** Animación de vasija de contención cilíndrica blindada, efecto de radiación Cherenkov reactivo a la potencia, destellos térmicos de fisión, partículas neutrónicas (rápidas/térmicas) y tablero HUD con osciloscopio en vivo.
+* **Ubicación:** `nuclear/`
 
 ---
 
@@ -129,6 +168,37 @@ python main.py --pumps 3 --lamb 5.0 --mu 2.0        # Parametrizado
 python main.py --headless --duration 300            # Benchmarking sin ventana
 ```
 
+### Ejecutar Automercado (Líneas de Espera SimPy + Pygame)
+
+Desde la raíz del repositorio:
+```bash
+cd automercado
+python main.py                                      # Vista grafica interactiva
+python main.py --registers 4 --lamb 5.0 --mu 1.5    # Parametrizado
+python main.py --queue-mode single                  # Fila unica central M/M/c
+python main.py --headless --duration 300            # Benchmarking sin ventana
+```
+
+### Ejecutar Transporte (Optimización de Rutas Pygame)
+
+Desde la raíz del repositorio:
+```bash
+cd transporte
+python main.py                                      # Vista grafica interactiva
+python main.py --origin VAL --dest CCS --speed 2.0  # Ruta especifica
+python main.py --headless --auto --duration 30      # Benchmarking sin ventana
+```
+
+### Ejecutar Reactor Nuclear (SimPy + Pygame)
+
+Desde la raíz del repositorio:
+```bash
+cd nuclear
+python main.py                                      # Vista grafica interactiva
+python main.py --enrichment 0.20 --rods 0.40        # Parametrizado
+python main.py --headless --duration 60             # Benchmarking sin ventana
+```
+
 ---
 
 ## Ejecución de Pruebas Unitarias
@@ -156,5 +226,23 @@ pytest tests/ -v
 ### Pruebas de Estación de Servicio
 ```bash
 cd estacion
+pytest tests/ -v
+```
+
+### Pruebas de Automercado
+```bash
+cd automercado
+pytest tests/ -v
+```
+
+### Pruebas de Transporte
+```bash
+cd transporte
+pytest tests/ -v
+```
+
+### Pruebas de Reactor Nuclear
+```bash
+cd nuclear
 pytest tests/ -v
 ```
