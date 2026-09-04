@@ -36,6 +36,17 @@ metodos_cuantitativos/
 │   ├── respuestaPregunta1.md           # Respuesta escrita Ejercicio 1 (EOQ)
 │   ├── respuestaPregunta2.md           # Respuesta escrita Ejercicio 2 (Quiebre de precios)
 │   └── respuestaPregunta3.md           # Respuesta escrita Ejercicio 3 (Restricciones)
+├── claseSimulacion/                    # Simulacion de Eventos Discretos: Juego Snake (SimPy + Pygame en POO)
+│   ├── main.py                         # Punto de entrada (Modo manual, Auto IA, Headless)
+│   ├── src/                            # Arquitectura POO: models, simulation, view, engine
+│   ├── tests/                          # Tests unitarios con pytest (12 tests)
+│   └── README.md                       # Documentacion tecnica y de ejecucion
+│
+├── estacion/                           # Simulacion de Linea de Espera: Estacion de Gasolina M/M/c (SimPy + Pygame)
+│   ├── main.py                         # Punto de entrada interactivo y CLI
+│   ├── src/                            # Arquitectura POO: models, simulation, view, engine
+│   ├── tests/                          # Tests unitarios con pytest (10 tests)
+│   └── README.md                       # Documentacion tecnica y fundamentos M/M/c
 │
 └── README.md                           # Documentación general del repositorio
 ```
@@ -59,6 +70,19 @@ Implementa una aplicación con arquitectura modular Top-Down Design e interfaz g
   4. **Multi-Artículo con Restricciones:** Optimización simultánea con límites de espacio/área física y presupuesto financiero mediante Multiplicadores de Lagrange (exacto y aproximación clásica de Taha).
 * **Exportación de reportes:** Generación de archivos `.txt` en `tarea2/outputs/` con diagnósticos e interpretaciones económicas de decisión.
 * **Ubicación:** `tarea2/`
+
+### Clase Simulación — Sistema Discreto: Juego Snake (SimPy + Pygame)
+Implementa un modelo de simulación por eventos discretos bajo el paradigma de Programación Orientada a Objetos (POO):
+* **Motor SimPy:** Modela procesos estocásticos y saltos discretos temporales para el movimiento de la serpiente, ciclo de vida de alimentos normales/bonus y muestreo de métricas.
+* **Motor Pygame:** Visualización en tiempo real desacoplada con soporte para velocidad variable (1x, 2x, 4x), HUD de telemetría y controles interactivos.
+* **Modo Auto IA:** Agente autónomo con búsqueda por anchura (BFS) y heurística de supervivencia navegable para análisis y benchmarking sin intervención humana.
+* **Ubicación:** `claseSimulacion/`
+
+### Estación de Servicio — Líneas de Espera M/M/c (SimPy + Pygame)
+Implementa un modelo estocástico de atención de combustible bajo la teoría de colas $M/M/c$ con vista cenital interactiva:
+* **Motor SimPy:** Llegadas Poisson ($\lambda$), tiempos de servicio exponenciales ($\mu$), surtidores paralelos ($c=3$), tanque de almacenamiento y cisterna de reabastecimiento.
+* **Motor Pygame Top-Down:** Animación cenital de vehículos, islas de bombas con LEDs de estado, mangueras activas, cola física delimitada y tablero HUD con contraste analítico (teórico vs simulado).
+* **Ubicación:** `estacion/`
 
 ---
 
@@ -86,6 +110,25 @@ cd tarea2
 python main.py
 ```
 
+### Ejecutar Clase Simulación (Snake SimPy + Pygame)
+
+Desde la raíz del repositorio:
+```bash
+cd claseSimulacion
+python main.py             # Modo manual interactivo
+python main.py --mode auto # Modo simulacion autonoma con IA
+```
+
+### Ejecutar Estación de Servicio (Gasolinera M/M/c SimPy + Pygame)
+
+Desde la raíz del repositorio:
+```bash
+cd estacion
+python main.py                                      # Vista grafica interactiva
+python main.py --pumps 3 --lamb 5.0 --mu 2.0        # Parametrizado
+python main.py --headless --duration 300            # Benchmarking sin ventana
+```
+
 ---
 
 ## Ejecución de Pruebas Unitarias
@@ -101,5 +144,17 @@ pytest tests/ -v
 ### Pruebas de Tarea 2
 ```bash
 cd tarea2
+pytest tests/ -v
+```
+
+### Pruebas de Clase Simulación
+```bash
+cd claseSimulacion
+pytest tests/ -v
+```
+
+### Pruebas de Estación de Servicio
+```bash
+cd estacion
 pytest tests/ -v
 ```
