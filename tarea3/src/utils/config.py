@@ -46,7 +46,9 @@ def cargar_variables_entorno() -> Dict[str, str]:
 
     rutas_env = [
         BASE_DIR / ".env",
+        BASE_DIR.parent / ".env",
         Path.cwd() / ".env",
+        Path.cwd().parent / ".env",
     ]
 
     for ruta in rutas_env:

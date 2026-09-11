@@ -13,10 +13,12 @@ from src.services.reporter import ReportService
 
 # Modelos recomendados de Google AI Studio
 MODELOS_GEMINI = [
-    "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
+    "gemini-flash-latest",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-pro-latest",
+    "gemini-2.5-flash-lite",
+    "gemini-2.5-pro",
 ]
 
 
@@ -132,20 +134,25 @@ class AIAuditorService:
         4. Backend REST Propio Personalizado (LOCAL_API_URL)
         Retorna (exito: bool, respuesta_o_error: str, nombre_fuente: str).
         """
+        errores = []
         if self.gemini_key:
             ok, resp = self.consultar_gemini(prompt_texto)
             if ok:
                 return True, resp, "Google Gemini AI (API Oficial)"
+            errores.append(f"Google Gemini: {resp}")
 
         if self.openai_key:
             ok, resp = self.consultar_openai(prompt_texto)
             if ok:
                 return True, resp, "OpenAI API (GPT-4o-mini)"
+            errores.append(f"OpenAI: {resp}")
 
         # Intento con Ollama local
         ok_ollama, resp_ollama = self.consultar_ollama(prompt_texto)
         if ok_ollama:
             return True, resp_ollama, "Ollama Local API (LLM)"
+        if self.local_url:
+            errores.append(f"Ollama: {resp_ollama}")
 
         # Intento con backend REST propio
         if self.local_url and "11434" not in self.local_url:
@@ -155,10 +162,14 @@ class AIAuditorService:
                     d = r.json()
                     txt = d.get("response", d.get("text", r.text))
                     return True, txt, "Backend REST Propio"
-            except Exception:
-                pass
+                errores.append(f"Backend Propio HTTP {r.status_code}")
+            except Exception as ex:
+                errores.append(f"Backend Propio: {ex}")
 
-        motivo = "No se detectaron claves de API (Gemini/OpenAI) ni servicio local (Ollama/REST)."
+        if errores:
+            motivo = " | ".join(errores)
+        else:
+            motivo = "No se detectaron claves de API (Gemini/OpenAI) ni servicio local (Ollama/REST)."
         return False, motivo, ""
 
     def ejecutar_auditoria_completa(
