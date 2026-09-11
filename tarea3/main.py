@@ -144,15 +144,22 @@ def main():
             app = SimulatorApp()
             app.run()
         except Exception as ex:
-            print(f"No fue posible inicializar la ventana grafica ({ex}).")
-            print("Ejecutando en modo headless alternativo...")
-            ejecutar_modo_headless(
-                duracion_s=args.duration,
-                lamb=args.lamb,
-                mu=args.mu,
-                capacidad_s=args.capacidad_s,
-                exportar=True,
-            )
+            es_error_display = any(k in str(ex).lower() for k in ("display", "video", "driver", "window"))
+            if es_error_display:
+                print(f"No fue posible inicializar la ventana grafica ({ex}).")
+                print("Ejecutando en modo headless alternativo...")
+                ejecutar_modo_headless(
+                    duracion_s=args.duration,
+                    lamb=args.lamb,
+                    mu=args.mu,
+                    capacidad_s=args.capacidad_s,
+                    exportar=True,
+                )
+            else:
+                import traceback
+                print(f"Error critico al ejecutar la interfaz grafica: {ex}")
+                traceback.print_exc()
+                sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ Universidad Jose Antonio Paez
 
 from pathlib import Path
 import sys
+from typing import Dict, List, Optional, Tuple, Union
 import pygame
 
 from src.services.simulation_service import NetworkSimulation
