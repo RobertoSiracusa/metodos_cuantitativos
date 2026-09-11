@@ -9,3 +9,5 @@ htmlcov/
 .venv/
 venv/
 env/
+*.log
+~$*
