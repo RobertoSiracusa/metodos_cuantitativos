@@ -1,61 +1,11 @@
-# ==============================================================================
-# .gitignore - Métodos y Simulaciones / Parcial III
-# ==============================================================================
-
-# 1. Seguridad y Variables de Entorno (Credenciales y API Keys)
-.env
-.env.*
-*.env
-*.key
-*.pem
-secrets/
-
-# 2. Entornos Virtuales y Dependencias de Python
-.venv/
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
-# 3. Caché de Python y Compilación
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
 .pytest_cache/
-.mypy_cache/
-
-# 4. Archivos de Trazas y Logs Generados en Simulaciones
-trazas/*.log
-trazas/*.csv
-trazas/analisis_gemini_*.txt
-trazas/analisis_*.txt
-!trazas/.gitkeep
-practica parcial 3/trazas/*.log
-practica parcial 3/trazas/*.csv
-practica parcial 3/trazas/analisis_gemini_*.txt
-practica parcial 3/trazas/analisis_*.txt
-!practica parcial 3/trazas/.gitkeep
-*.log
-
-# 5. IDEs y Editores de Código
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.gemini/
-.agents/
-
-# 6. Archivos del Sistema Operativo
+.coverage
+htmlcov/
+.env
 .DS_Store
-Thumbs.db
-desktop.ini
-$RECYCLE.BIN/
-powershell.bat
-
-# 7. Carpetas y Material Local
-Clase/
-clase/
-
+.venv/
+venv/
+env/
