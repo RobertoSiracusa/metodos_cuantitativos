@@ -1,315 +1,191 @@
-# Simulador Dinámico de Redes de Computadoras
+# Tarea 3 — Simulador Dinamico de Redes de Computadoras
+### Modelos Cuantitativos, Teoria de Colas e Investigacion de Operaciones
 
-### Universidad José Antonio Páez — Facultad de Ingeniería
-
-### Escuela de Ingeniería en Computación | Métodos Cuantitativos y Simulación
-
-Simulador estocástico, visual e interactivo de una red de computadoras desarrollado en **Python** integrando el motor de eventos discretos **SimPy**, la biblioteca gráfica **Pygame** a 60 FPS, modelos de optimización combinatoria (**SciPy / Algoritmo Húngaro**), auditoría automatizada mediante **Google Gemini AI** y compilación del informe técnico en Word (**python-docx**).
+**Universidad Jose Antonio Paez — Facultad de Ingenieria**  
+**Escuela de Ingenieria en Computacion — Metodos Cuantitativos y Simulacion**
 
 ---
 
-## IMPORTANTE: Configuración de la API Key de Google Gemini
+## Descripcion General
 
-> [!IMPORTANT]
-> **ATENCIÓN AL EVALUADOR / USUARIO:**
-> Para realizar peticiones HTTP en vivo a la API de **Google Gemini**, **es indispensable ingresar una API Key propia**, ya que la clave personal del creador del código se encuentra protegida por motivos de seguridad y confidencialidad.
+Este proyecto implementa un simulador visual, estocastico e interactivo de una red de computadoras en tiempo real desarrollado en Python mediante el motor de eventos discretos **SimPy**, la biblioteca grafica **Pygame** a 60 FPS, modelos de optimizacion combinatoria (**SciPy / Algoritmo Hungaro**), integracion HTTP con APIs de Inteligencia Artificial (**Google Gemini AI / OpenAI**) y generacion automatizada del informe tecnico formal en Word (**python-docx**).
 
-### ¿Cómo obtener y configurar tu propia API Key de Google Gemini?
-
-1. **Obtener la clave gratuita en Google AI Studio:**
-   - Ingresa a [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) con tu cuenta de Google.
-   - Haz clic en **"Create API key"** (Crear clave de API).
-   - Copia la clave generada (suele comenzar por `AIzaSy...` y tener 39 caracteres).
-
-2. **Configurarla en el proyecto (Cualquiera de los 2 métodos siguientes):**
-   - **Método A: Mediante archivo `.env` (Recomendado):**
-     Abre o edita el archivo `.env` en la raíz del proyecto y coloca tu clave:
-
-     ```env
-     GEMINI_API_KEY=AIzaSyTuClaveOficialDeGoogleStudioAqui
-     ```
-
-   - **Método B: Variable de entorno del sistema:**
-     - En **PowerShell**:
-       ```powershell
-       $env:GEMINI_API_KEY="AIzaSyTuClaveOficialDeGoogleStudioAqui"
-       ```
-     - En **CMD (Símbolo del sistema)**:
-       ```cmd
-       set GEMINI_API_KEY=AIzaSyTuClaveOficialDeGoogleStudioAqui
-       ```
-
-### Motor de Contingencia (Modo de Respaldo Local)
-
-Si no dispones de una clave de API al momento de la prueba o si no cuentas con conexión a Internet:
-
-- El software **no se detendrá ni arrojará errores**.
-- El módulo [gemini_client.py](file:///c:/Users/usuario/Desktop/Metodos-Cuantitativos-Simulaciones/gemini_client.py) activará automáticamente el **Motor Experto Cuantitativo Local de Respaldo**.
-- Este motor evaluará matemáticamente las métricas de la simulación ($L, L_q, W, W_q$, tasa de pérdida y costos) y generará el diagnóstico y las 3 recomendaciones de optimización requeridas por el enunciado tanto en consola como en [reporte_simulacion.txt](file:///c:/Users/usuario/Desktop/Metodos-Cuantitativos-Simulaciones/reporte_simulacion.txt).
+Sigue los mismos estandares de ingenieria de software, arquitectura modular descendente (**Top-Down Design**), orientacion a objetos (POO) y desacoplamiento estructural aplicados en las Tareas 1 y 2 del curso.
 
 ---
 
-## Tabla de Contenidos
+## Arquitectura Top-Down del Proyecto
 
-1. [Descripción General de la Red](#-descripción-general-de-la-red)
-2. [Fundamentación Matemática y Modelado Cuantitativo](#-fundamentación-matemática-y-modelado-cuantitativo)
-   - [A. Teoría de Colas (Líneas de Espera M/M/1/K)](#a-teoría-de-colas-líneas-de-espera-mm1k)
-   - [B. Gestión de Inventario en Buffers (s, Q)](#b-gestión-de-inventario-en-buffers-s-q)
-   - [C. Asignación Óptima y Enrutamiento (Algoritmo Húngaro)](#c-asignación-óptima-y-enrutamiento-algoritmo-húngaro)
-3. [Estructura del Repositorio y Entregables](#-estructura-del-repositorio-y-entregables)
-4. [Instalación y Requisitos](#-instalación-y-requisitos)
-5. [Guía de Uso y Controles Interactivos](#-guía-de-uso-y-controles-interactivos)
-6. [Generación de Entregables Oficiales](#-generación-de-entregables-oficiales)
-7. [Pruebas Automatizadas Unitarias](#-pruebas-automatizadas-unitarias)
+La estructura del proyecto organiza la logica en capas limpias e independientes:
 
----
-
-## Descripción General de la Red
-
-El sistema modela una infraestructura de red de computadoras estocástica en tiempo real con la siguiente topología:
-
-- **Fuentes Emisoras ($S_1, S_2, S_3$)**:
-  - $S_1$: Servidor Web de alta concurrencia.
-  - $S_2$: Clúster Transaccional de Base de Datos.
-  - $S_3$: Plataforma CDN / Multimedia Streaming.
-- **Capa de Conmutación y Routers Core ($R_1, R_2, R_3, R_4$)**:
-  - Cuatro nodos intermedios que disponen de procesadores de modulación (servidores SimPy) y buffers de almacenamiento temporal (capacidad $S$ y umbral $s$).
-- **Gateways WAN de Salida ($D_1, D_2$)**:
-  - Destinos finales de los paquetes de datos.
-- **Enlaces de Comunicación Dinámicos**:
-  - Canales con retardo de propagación estocástico (latencia base + fluctuación gaussiana / jitter) y soporte para simular fallas imprevistas.
-
-```
-       [S1: Web] ---------\
-                           +----> [R1: Router Core 1] -----\
-       [S2: BaseDatos] --->+----> [R2: Router Core 2] ----->+----> [D1: Gateway WAN A]
-                           +----> [R3: Router Core 3] ----->+----> [D2: Gateway WAN B]
-       [S3: CDN] ---------/-----> [R4: Router Core 4] -----/
-                                (Buffers S, s, Q)
-```
-
----
-
-## Fundamentación Matemática y Modelado Cuantitativo
-
-### A. Teoría de Colas (Líneas de Espera $M/M/1/K$)
-
-Cada router opera como una estación de servicio exponencial con buffer finito:
-
-- **Llegadas de Tráfico**: Proceso de Poisson con tasa media $\lambda$ (paquetes/segundo). La probabilidad de $k$ arribos en un intervalo $t$ es:
-  $$P(N(t) = k) = \frac{(\lambda t)^k e^{-\lambda t}}{k!}$$
-  El tiempo entre arribos consecutivos sigue una distribución exponencial: $t_{\text{arribo}} \sim \text{Exp}(\lambda)$.
-- **Tiempos de Servicio**: Distribución exponencial con tasa media $\mu$ (paquetes/segundo): $t_{\text{servicio}} \sim \text{Exp}(\mu)$.
-- **Métricas Computadas en Tiempo Real**:
-  - $L$: Número promedio de paquetes en el sistema (en buffer + en transmisión):
-    $$L = \frac{1}{T} \int_{0}^{T} N(t) \, dt$$
-  - $L_q$: Número promedio de paquetes esperando en cola de buffer:
-    $$L_q = \frac{1}{T} \int_{0}^{T} q(t) \, dt$$
-  - $W$: Tiempo medio de permanencia en la red (desde creación hasta entrega):
-    $$W = \frac{1}{K} \sum_{i=1}^{K} (t_{\text{entrega}} - t_{\text{creación}})_i$$
-  - $W_q$: Tiempo medio de retardo en cola antes de ser atendido:
-    $$W_q = \frac{1}{K} \sum_{i=1}^{K} (t_{\text{inicio\_servicio}} - t_{\text{ingreso\_buffer}})_i$$
-  - **Ley de Little Verificada**: $L = \lambda_{\text{efectivo}} \cdot W$ y $L_q = \lambda_{\text{efectivo}} \cdot W_q$.
-  - **Factor de Utilización ($\rho$)**: $\rho = \frac{\lambda}{c \cdot \mu}$, indicando la fracción de tiempo que los servidores están ocupados.
-
----
-
-### B. Gestión de Inventario en Buffers ($(s, Q)$)
-
-Los buffers de memoria RAM se modelan bajo la teoría clásica de control de inventarios:
-
-- **Capacidad Máxima ($S$)**: Límite de paquetes almacenables en la cola del router.
-- **Política de Control de Flujo $(s, Q)$**: Cuando la cantidad de paquetes en buffer disminuye por debajo del umbral mínimo $s$, el router emite una señal de control de flujo (análoga al crédito de ventana TCP) para liberar un lote $Q$ de paquetes o desbloquear el canal de entrada.
-- **Desbordamiento de Buffer (Buffer Overflow / Ruptura de Stock)**: Si un paquete arriba y el buffer tiene $q \ge S$, el paquete es descartado (Packet Loss).
-- **Modelo Económico y Costos del Sistema**:
-  - **Costo de Mantener en Memoria ($C_h$)**: Asociado al tiempo de ocupación de RAM y latencia ($C_h = \$0.05$ / paquete / segundo):
-    $$C_{\text{almacenamiento}} = C_h \cdot \int_{0}^{T} q(t) \, dt$$
-  - **Costo de Ruptura / Penalización ($C_s$)**: Penalización financiera por cada paquete perdido ($C_s = \$10.00$ / descarte):
-    $$C_{\text{penalización}} = C_s \cdot (\text{Total Paquetes Descartados})$$
-  - **Costo Global del Sistema**:
-    $$C_{\text{global}} = C_{\text{almacenamiento}} + C_{\text{penalización}}$$
-
----
-
-### C. Asignación Óptima y Enrutamiento (Algoritmo Húngaro)
-
-Cada intervalo discreto $\Delta t = 1.0\text{ s}$, el sistema evalúa los flujos de paquetes pendientes y los enlaces de transmisión disponibles.
-
-- **Matriz de Costos Dinámicos ($C_{ij}$)**:
-  $$C_{ij} = \text{Latencia Actual del Enlace}_{ij} + \alpha \cdot \left(\frac{\text{Cola Actual del Nodo}_j}{S_j}\right)$$
-  donde:
-  - $\text{Latencia Actual}_{ij}$: Retardo de propagación en milisegundos con fluctuación (jitter).
-  - $\frac{\text{Cola Actual}_j}{S_j} \in [0.0, 1.0]$: Saturación actual del buffer de destino.
-  - $\alpha = 40.0\text{ ms}$: Factor de ponderación que penaliza el envío de paquetes a routers congestionados.
-  - **Penalización de Enlace Caído**: Si un enlace sufre una falla imprevista o es inhabilitado, su costo se establece en $C_{ij} = 10^6$, forzando al algoritmo a reasignar el tráfico por rutas operativas alternas.
-- **Resolución**: Implementado mediante `scipy.optimize.linear_sum_assignment` con una implementación propia del algoritmo de Kuhn-Munkres para entornos nativos.
-
----
-
-## Estructura del Repositorio y Entregables
-
-```
-Metodos-Cuantitativos-Simulaciones/
+```text
+tarea3/
 │
-├── main.py                                  # [ENTREGABLE 1] Aplicación principal (Pygame + SimPy)
-├── red_simulacion.py                        # Motor estocástico, colas M/M/1/K y buffer (s, Q)
-├── hungarian_router.py                      # Algoritmo Húngaro (SciPy y Kuhn-Munkres nativo)
-├── gui_network.py                           # Interfaz gráfica Slate 900 y Dashboard HUD a 60 FPS
-├── gemini_client.py                         # Cliente HTTP Google Gemini + Motor Cuantitativo Local
-├── reporte_simulacion.txt                   # [ENTREGABLE 2] Reporte estructurado con métricas y AI
-├── Informe_Tecnico_Simulador_Redes.docx     # [ENTREGABLE 3] Informe formal UJAP en Word
-├── generar_informe_docx.py                  # Script para compilar/recompilar el informe Word
-├── test_simulacion.py                       # Suite de pruebas unitarias automatizadas (5/5 OK)
-├── captura_simulacion.png                   # Captura real de la interfaz gráfica del simulador
-├── requirements.txt                         # Lista de dependencias del proyecto
-└── .env                                     # Archivo para configurar tu GEMINI_API_KEY
+├── main.py                             # Punto de entrada principal (GUI interactiva y CLI Headless)
+├── requirements.txt                    # Dependencias formales del proyecto
+├── .env.example                        # Plantilla de configuracion para credenciales de API
+├── .gitignore                          # Exclusiones de control de versiones
+├── README.md                           # Documentacion tecnica del sistema
+│
+├── src/                                # Codigo fuente modularizado (Top-Down Design)
+│   ├── __init__.py
+│   │
+│   ├── core/                           # Capa de Dominio Cuantitativo y Modelos POO
+│   │   ├── __init__.py
+│   │   ├── queuing_model.py            # Teoria de Colas (M/M/1/K analitico y empirico, Little)
+│   │   ├── inventory_model.py          # Control de Inventario en Buffers (politica (s, Q), costos)
+│   │   ├── hungarian_model.py          # Algoritmo Hungaro (SciPy y Kuhn-Munkres nativo O(n^3))
+│   │   └── network_entities.py         # Entidades puras: Packet, NetworkLink, RouterNode
+│   │
+│   ├── services/                       # Capa de Servicios y Orquestacion
+│   │   ├── __init__.py
+│   │   ├── simulation_service.py       # Motor estocastico SimPy (Poisson, servidores exponenciales)
+│   │   ├── reporter.py                 # Exportador de reportes planos .txt segun pauta oficial
+│   │   ├── ai_auditor.py               # Cliente HTTP (Gemini/OpenAI) y Motor Experto Local
+│   │   └── docx_service.py             # Compilador del Informe Tecnico institucional en Word (.docx)
+│   │
+│   ├── gui/                            # Capa de Presentacion (Pygame a 60 FPS)
+│   │   ├── __init__.py
+│   │   ├── app.py                      # Ventana principal SimulatorApp y ciclo de eventos
+│   │   ├── styles.py                   # Paleta Slate 900, colores condicionales y tipografia
+│   │   ├── widgets.py                  # Botones interactivos, tarjetas HUD y notificaciones
+│   │   ├── renderer.py                 # Renderizado de nodos, enlaces dinamicos y paquetes animados
+│   │   └── dashboard.py                # Panel lateral de control y telemetria HUD
+│   │
+│   └── utils/                          # Capa de Utilidades y Configuracion
+│       ├── __init__.py
+│       ├── config.py                   # Carga de entorno, constantes globales y rutas
+│       └── validators.py               # Validaciones de consistencia cuantitativa
+│
+├── outputs/                            # Entregables oficiales generados
+│   ├── reporte_simulacion.txt          # [Entregable 2] Reporte con metricas y auditoria
+│   ├── Informe_Tecnico_Simulador_Redes.docx # [Entregable 3] Informe formal UJAP
+│   └── captura_simulacion.png          # Captura de la interfaz interactiva para el informe
+│
+└── tests/                              # Suite de pruebas automatizadas (pytest)
+    ├── __init__.py
+    ├── conftest.py                     # Configuracion de rutas para el harness de pruebas
+    ├── test_queuing_model.py           # Pruebas analiticas de colas M/M/1/K y Ley de Little
+    ├── test_inventory_model.py         # Pruebas de politica (s, Q) y costos de inventario
+    ├── test_hungarian_model.py         # Pruebas de asignacion optima (SciPy vs Nativo)
+    ├── test_simulation_engine.py       # Pruebas de corrida estocastica, fallas y desborde
+    └── test_services.py                # Pruebas de exportacion TXT, DOCX y auditoria
 ```
 
 ---
 
-## Instalación y Requisitos
+## Fundamentacion Matematica y Modelos Cuantitativos
+
+### 1. Teoria de Colas (Lineas de Espera M/M/1/K)
+- **Generacion de Trafico**: Proceso de Poisson con tasa media `lambda` paquetes/segundo. El tiempo entre llegadas consecutivas sigue una distribucion exponencial $t \sim \text{Exp}(\lambda)$.
+- **Atencion en Routers**: Servidores con disciplina FIFO y tiempos de servicio exponenciales con tasa media `mu` paquetes/segundo ($t_s \sim \text{Exp}(\mu)$).
+- **Metricas Computadas**:
+  - $L$: Numero promedio de paquetes en el sistema (en buffer + en servidor).
+  - $L_q$: Numero promedio de paquetes esperando en cola de buffer.
+  - $W$: Tiempo medio de estancia total en la red.
+  - $W_q$: Tiempo medio de espera en cola antes de ser atendido.
+  - **Ley de Little Verificada**: $L = \lambda_{\text{efectivo}} \cdot W$ y $L_q = \lambda_{\text{efectivo}} \cdot W_q$.
+  - **Factor de Utilizacion**: $\rho = \frac{\lambda}{c \cdot \mu}$.
+
+### 2. Gestion de Inventario en Buffers (Politica (s, Q))
+- **Capacidad Maxima ($S$)**: Limite de paquetes almacenables por router.
+- **Politica de Reabastecimiento / Control de Flujo ($s, Q$)**: Cuando el nivel de ocupacion del buffer desciende por debajo del umbral minimo $s$, el router genera una senal de control de flujo para autorizar un nuevo lote de $Q$ paquetes o liberar el canal de entrada.
+- **Desbordamiento de Buffer (Buffer Overflow)**: Si arriba un paquete y el buffer tiene $q \ge S$, ocurre un descarte forzoso (Packet Loss).
+- **Costos Cuantitativos**:
+  - Costo de Mantener (Holding Cost en RAM): $C_h = \$0.05$ por paquete por segundo almacenado.
+  - Costo de Ruptura / Penalizacion (Shortage Cost): $C_s = \$10.00$ por paquete descartado.
+  - Costo Global: $C_{\text{global}} = C_h \cdot \int_0^T q(t) \, dt + C_s \cdot (\text{Paquetes Perdidos})$.
+
+### 3. Modelo de Asignacion Optima (Algoritmo Hungaro)
+En intervalos discretos $\Delta t = 1.0\text{ s}$, el enrutador evalua la matriz de costos dinamicamente:
+$$C_{ij} = \text{Latencia Actual del Enlace}_{ij} + \alpha \cdot \left(\frac{\text{Cola Actual del Nodo}_j}{S_j}\right)$$
+donde $\alpha = 40.0\text{ ms}$ pondera la saturacion del buffer. Ante una falla o desconexion de enlace, el costo se fija en $C_{ij} = 10^6$ (penalizacion prohibitiva), obligando al algoritmo a seleccionar una ruta alternativa disponible.
+
+El sistema implementa resolucion mediante SciPy (`linear_sum_assignment`) y cuenta con una implementacion nativa propia de **Kuhn-Munkres $O(n^3)$ con ajuste de potenciales duales**, garantizando operacion 100% autonoma.
+
+---
+
+## Codigo de Color Condicional de Routers (Pauta Oficial)
+
+- **Verde**: Saturacion de buffer $< 50\%$.
+- **Amarillo**: Saturacion de buffer entre $50\%$ y $80\%$.
+- **Rojo**: Saturacion de buffer $> 80\%$ (con halo de advertencia reactivo).
+
+---
+
+## Instalacion y Requisitos
 
 ### Requisitos Previos:
+- Python 3.10 o superior (compatible con Linux, macOS y Windows).
 
-- Python 3.10 o superior (probado en Python 3.13 en Windows 64-bit).
-
-### Pasos de Instalación:
-
-1. **Abrir la terminal en la carpeta del proyecto**:
-
+### Pasos de Instalacion:
+1. Clonar o acceder a la carpeta del proyecto:
    ```bash
-   cd c:\Users\usuario\Desktop\Metodos-Cuantitativos-Simulaciones
+   cd tarea3
    ```
-
-2. **Instalar dependencias necesarias**:
-
+2. Instalar dependencias necesarias:
    ```bash
    pip install -r requirements.txt
    ```
-
-3. **Configurar tu API Key de Gemini**:
-   Edita el archivo `.env` y coloca tu clave:
+3. (Opcional) Configurar clave de API en `.env`:
    ```env
-   GEMINI_API_KEY=tu_clave_de_google_ai_studio
+   GEMINI_API_KEY=AIzaSy...
    ```
+   *Nota: Si no se configura una clave, el Motor Experto Cuantitativo Local de Respaldo evalua automaticamente los resultados matematicos sin arrojar errores.*
 
 ---
 
-## Guía de Uso y Controles Interactivos
+## Guia de Uso
 
-Para iniciar el simulador interactivo ejecuta:
-
+### Modo Interactivo Visual (Pygame):
+Inicia la aplicacion visual completa a 60 FPS:
 ```bash
 python main.py
 ```
 
-### Tabla de Controles por Teclado y Ratón:
-
-| Control                              |           Atajo           | Función                                                                          |
-| :----------------------------------- | :-----------------------: | :------------------------------------------------------------------------------- |
-| **Pantalla Expandida**               |       `F11` o Botón       | Alterna entre Pantalla Expandida (maximizada por defecto) y Ventana Reducida     |
-| **Pausar / Reanudar**                |      `ESPACIO` o `P`      | Detiene temporalmente el avance del reloj de SimPy                               |
-| **Ajustar Velocidad**                |  `1`, `2`, `3`, `4`, `5`  | Selector directo: `0.25x` (Lento), `0.5x` (Didáctico), `1x` (Normal), `2x`, `4x` |
-| **Paso de Velocidad**                |   `[` o `-` / `]` o `+`   | Disminuye o aumenta la velocidad de la simulación gradualmente                   |
-| **Ajustar Tasa Llegada ($\lambda$)** | `FLECHA ARRIBA` / `ABAJO` | Aumenta o disminuye el volumen de tráfico entrante                               |
-| **Ajustar Tasa Servicio ($\mu$)**    | `FLECHA DERECHA` / `IZQ`  | Acelera o ralentiza la capacidad de modulación de routers                        |
-| **Simular Caída de Enlaces**         |  `F1`, `F2`, `F3` o Clic  | Desconecta/reconecta enlaces ($S_1$-$R_1$, etc.) para observar re-enrutamiento   |
-| **Exportar y Auditar con Gemini**    |            `E`            | Genera `reporte_simulacion.txt` y consulta la API de IA                          |
-| **Capturar Pantalla**                |           `F12`           | Guarda `captura_simulacion.png` para el informe técnico                          |
-| **Reiniciar Simulación**             |            `R`            | Reinicia todos los acumuladores y buffers a cero                                 |
-| **Salir de la Aplicación**           |           `ESC`           | Exporta el estado final a TXT y cierra la ventana                                |
-| **Botones HUD de Velocidad**         |   Clic en `0.25x`..`4x`   | Permite alternar la velocidad directamente desde el panel                        |
-
-### Desglose Comprensible de Estadísticas (Dashboard HUD):
-
-- **1. Tráfico y Estabilidad**: Monitoreo de $\lambda$, $\mu$ e intervalo de arribos en milisegundos, junto con la Utilización de CPU ($\rho = \lambda / c\mu$) y su insignia de estabilidad (`[🟢 ESTABLE]`).
-- **2. Teoría de Colas (Significado Físico)**:
-  - **Espera en Cola ($W_q$)**: Demora promedio antes de ser atendido en milisegundos (`ms`) y segundos con insignia de diagnóstico (`[⚡ ÓPTIMO]`).
-  - **Estancia en Red ($W$)**: Tiempo total invertido desde el origen hasta el Gateway WAN.
-  - **En Sistema ($L$)**: Promedio de paquetes activos simultáneamente en la red.
-  - **En Cola ($L_q$)**: Promedio de paquetes varados en colas de espera.
-  - **Pérdida por Desborde**: Cantidad y % de paquetes descartados ante saturación.
-- **3. Inventario y Buffers ($(s, Q)$)**: Capacidad $S$, umbral de reabastecimiento $s$, lote $Q$, y monitores individuales de ocupación en routers $R_1..R_4$ con barras dinámicas y porcentajes.
-- **4. Costos Cuantitativos**: Almacenamiento RAM ($C_h = \$0.05/\text{paq}\cdot\text{s}$), Penalización por Ruptura ($C_s = \$10.00/\text{descarte}$) y Costo Global con insignia de eficiencia financiera.
-- **5. Algoritmo Húngaro**: Mapeo óptimo vigente de flujos hacia enlaces y costo de latencia en milisegundos.
-
-### Código de Color Condicional de Routers (Exigencia del Enunciado):
-
-- 🟢 **Verde**: Saturación de buffer $< 50\%$.
-- 🟡 **Amarillo**: Saturación de buffer entre $50\%$ y $80\%$.
-- 🔴 **Rojo**: Saturación de buffer $> 80\%$ (con halo de advertencia intermitente).
+### Modo por Lotes / Headless (Consola):
+Ejecuta la simulacion estocastica por un tiempo determinado y genera los reportes sin requerir interfaz grafica:
+```bash
+python main.py --headless --duration 120 --lambda 15.0 --mu 18.0 --capacidad-s 50
+```
 
 ---
 
-## Generación de Entregables Oficiales
+## Tabla de Controles (Teclado y Raton)
 
-### 1. Código Fuente (`.py`)
-
-Todo el código está completamente estructurado bajo el paradigma de **Programación Orientada a Objetos (POO)**, con tipado estático (`typing`), comentarios explicativos y manejo riguroso de excepciones.
-
-### 2. Archivo de Salida (`reporte_simulacion.txt`)
-
-Se genera automáticamente al presionar la tecla **`E`** o al cerrar el simulador. Cumple exactamente con la estructura de texto plano solicitada en el enunciado:
-
-```text
-==================================================
-REPORTE DE SIMULACIÓN DE RED
-==================================================
-Tiempo Total de Simulación: 120.0 s
-Tasa de Llegada (lambda): 15.0 paquetes/s
-Tasa de Servicio (mu): 18.0 paquetes/s
-Capacidad de Buffer (S): 50 paquetes
-Umbral Reabastecimiento (s): 10 paquetes
-
-METRICAS OBTENIDAS:
-- Paquetes Procesados: 1796
-- Paquetes Perdidos (Overflow): 0
-- Tasa de Pérdida: 0.00%
-- Tiempo Medio en Cola (Wq): 0.0435 s
-- Promedio Paquetes en Sistema (L): 0.90
-- Costo Total de Almacenamiento: $3.91
-- Costo Total de Penalización (Ruptura): $0.00
-- Costo Global del Sistema: $3.91
-==================================================
-
-==================================================
-ANÁLISIS AUTOMATIZADO Y RECOMENDACIONES (GEMINI AI)
-==================================================
-[Diagnóstico de Colas, Inventario y 3 Recomendaciones de Optimización]
-==================================================
-```
-
-### 3. Informe Técnico en Word (`Informe_Tecnico_Simulador_Redes.docx`)
-
-Para compilar o actualizar el informe Word con las métricas y capturas más recientes:
-
-```bash
-python generar_informe_docx.py
-```
-
-El documento generado incluye:
-
-- Membrete y portada formal de la **Universidad José Antonio Páez**.
-- Justificación teórica y fórmulas matemáticas completas.
-- Tabla formateada con todos los resultados numéricos de la corrida.
-- Captura de pantalla de la interfaz gráfica en ejecución incrustada en alta resolución.
-- Análisis cualitativo devuelto por el modelo inteligente.
-- Conclusiones y recomendaciones de ingeniería para dimensionamiento de red.
+| Accion | Atajo de Teclado | Control por Raton |
+| :--- | :---: | :--- |
+| **Pausar / Reanudar** | `ESPACIO` o `P` | Boton `Pausa` en Dashboard |
+| **Ajustar Tasa Llegada ($\lambda$)** | `FLECHA ARRIBA` / `ABAJO` | Botones `λ +` / `λ -` en Dashboard |
+| **Ajustar Tasa Servicio ($\mu$)** | `FLECHA DERECHA` / `IZQ` | Botones `μ +` / `μ -` en Dashboard |
+| **Simular Caida de Enlaces** | `F1`, `F2`, `F3` | Clic directo sobre la linea del enlace |
+| **Selector de Velocidad** | `1`, `2`, `3`, `4`, `5` | Botones `0.25x`, `0.5x`, `1.0x`, `2.0x`, `4.0x` |
+| **Pantalla Expandida** | `F11` | Boton `Expandir` en Dashboard |
+| **Capturar Pantalla** | `F12` | Guarda automaticamente `outputs/captura_simulacion.png` |
+| **Exportar y Auditar con IA** | `E` | Boton `Exportar` en Dashboard |
+| **Reiniciar Simulacion** | `R` | Boton `Reiniciar` en Dashboard |
+| **Finalizar y Guardar** | `ESC` | Cierre de ventana o tecla Escape |
 
 ---
 
-## Pruebas Automatizadas Unitarias
+## Entregables Oficiales Generados
 
-El proyecto incluye una suite de pruebas unitarias que valida cada componente de manera independiente:
+1. **Codigo Fuente (`src/` y `main.py`)**: Implementacion completa modular, tipada y comentada.
+2. **Archivo de Salida (`outputs/reporte_simulacion.txt`)**: Muestra con la estructura exacta exigida en el PDF y el analisis automatizado recibido de la API.
+3. **Informe Tecnico (`outputs/Informe_Tecnico_Simulador_Redes.docx`)**: Documento Word institucional con marco teorico, tabla formal de metricas, captura de pantalla de la interfaz y recomendaciones de ingenieria.
 
+---
+
+## Suite de Pruebas Automatizadas
+
+Para correr las pruebas unitarias:
 ```bash
-python test_simulacion.py
+pytest tests/ -v
 ```
 
-### Casos de Prueba Incluidos:
-
-1. `test_01_hungarian_router_cost_matrix`: Verifica que la matriz de costos $C_{ij}$ suma correctamente latencia y saturación ponderada, y penaliza con $10^6$ los enlaces caídos.
-2. `test_02_hungarian_assignment_resolution`: Valida que el Algoritmo Húngaro minimiza el costo total y descarta enlaces caídos.
-3. `test_03_simpy_network_simulation_run`: Ejecuta una simulación estocástica de 120 s en SimPy comprobando la coherencia de $L, L_q, W, W_q$.
-4. `test_04_buffer_overflow_and_holding_costs`: Somete el sistema a estrés ($\lambda \gg \mu$) para verificar que se generen descartes de paquetes y costos de penalización por desbordamiento.
-5. `test_05_export_report_txt_and_gemini_auditor`: Verifica la generación del archivo `reporte_simulacion.txt` y la invocación de la API / motor experto.
+Casos cubiertos:
+- Calculo analitico de colas M/M/1/K y verificacion de la Ley de Little.
+- Contabilidad de costos de almacenamiento y penalizaciones por desborde.
+- Matriz de costos del Algoritmo Hungaro y equivalencia exacta entre SciPy y Kuhn-Munkres nativo.
+- Simulacion estocastica de 120 segundos, conmutacion de fallas y desbordamiento bajo estres.
+- Exportacion de reportes TXT, auditoria cuantitativa y generacion de informe DOCX.

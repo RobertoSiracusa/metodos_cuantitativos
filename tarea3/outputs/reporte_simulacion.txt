@@ -1,0 +1,52 @@
+==================================================
+REPORTE DE SIMULACIÓN DE RED
+==================================================
+Tiempo Total de Simulación: 120.0 s
+Tasa de Llegada (lambda): 15.0 paquetes/s
+Tasa de Servicio (mu): 18.0 paquetes/s
+Capacidad de Buffer (S): 50 paquetes
+Umbral Reabastecimiento (s): 10 paquetes
+
+METRICAS OBTENIDAS:
+- Paquetes Procesados: 1773
+- Paquetes Perdidos (Overflow): 0
+- Tasa de Pérdida: 0.00%
+- Tiempo Medio en Cola (Wq): 0.0708 s
+- Promedio Paquetes en Sistema (L): 1.29
+- Costo Total de Almacenamiento: $6.28
+- Costo Total de Penalización (Ruptura): $0.00
+- Costo Global del Sistema: $6.28
+==================================================
+
+
+==================================================
+RESPUESTA DE LA API: ANALISIS AUTOMATIZADO Y RECOMENDACIONES (MOTOR EXPERTO CUANTITATIVO LOCAL (RESPALDO UJAP))
+==================================================
+1. DIAGNOSTICO DE EFICIENCIA Y TEORIA DE COLAS (M/M/1/K):
+- Tasa media de llegada observada: lambda = 15.0 paq/s frente a tasa de servicio mu = 18.0 paq/s.
+- Factor de utilizacion por router core: rho = 0.208 (20.8% de ocupacion del canal).
+- Tiempo medio en cola (Wq = 0.0708 s): Los paquetes transitan con fluidez por los nodos intermedios.
+- Promedio de paquetes en el sistema (L = 1.29): Consistente con la Ley de Little (L = lambda_eff * W).
+
+2. EVALUACION DEL CONTROL DE INVENTARIO EN BUFFERS:
+- Capacidad maxima S = 50 paquetes y Umbral de reabastecimiento s = 10 paquetes.
+- Retencion completa de paquetes (0.00% de perdida). La capacidad S=50 paquetes ha contenido adecuadamente las rafagas estocasticas de Poisson.
+- Estructura de costos financieros:
+  * Costo de almacenamiento (Holding RAM): $6.28 (100.0% del costo global).
+  * Costo de penalizacion por ruptura: $0.00 (0.0% del costo global).
+  * Costo global del sistema: $6.28.
+
+3. ANALISIS DEL BALANCEO DE CARGA MEDIANTE ALGORITMO HUNGARO:
+- La minimizacion continua de la matriz C_ij = Latencia_ij + alpha*(cola_j / S_j) evito cuellos de botella
+  monofasicos, distribuyendo el trafico hacia los routers con buffers mas despejados.
+- Ante simulacion de enlace caido, la penalizacion forzosa a 10^6 reasigno el trafico por rutas
+  operativas alternas sin interrupcion de servicio.
+
+4. TRES (3) RECOMENDACIONES DE OPTIMIZACION DE INGENIERIA:
+- Recomendacion 1: Dimensionamiento adaptativo de buffer S: Ajustar S a un rango de 60 a 70 paquetes
+  para absorber picos extremos de trafico sin elevar desproporcionadamente el costo de retencion en memoria.
+- Recomendacion 2: Ajuste estacional de alpha en Algoritmo Hungaro: Incrementar alpha a 60.0 durante
+  periodos de alta concurrencia para priorizar la evacuacion de colas frente al retardo base de enlace.
+- Recomendacion 3: Escalado elastico de la tasa de servicio mu: Habilitar conmutacion multinucleo para
+  incrementar mu cuando la saturacion supere el umbral del 75%, reduciendo el tiempo Wq a menos de 0.03 s.
+==================================================
