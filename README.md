@@ -27,7 +27,16 @@ metodos_cuantitativos/
 │   ├── tests/                          # Tests unitarios con pytest (19 tests)
 │   ├── Guia de Problemas ...pdf        # Guía de problemas del curso
 │   ├── Segunda tarea ...pdf            # Pauta oficial de la tarea
-│   └── README.md                   # Documentación específica de Tarea 2
+│   └── README.md                       # Documentación específica de Tarea 2
+│
+├── tarea3/                             # Tarea 3: Simulador Dinámico de Redes (M/M/1/K + Inventarios + Algoritmo Húngaro)
+│   ├── main.py                         # Punto de entrada (GUI Pygame a 60 FPS / CLI Headless)
+│   ├── src/                            # Arquitectura Top-Down POO: core, services, gui, utils
+│   ├── outputs/                        # Reporte .txt, informe .docx oficial y captura de pantalla
+│   ├── tests/                          # Tests unitarios con pytest (11 tests)
+│   ├── requirements.txt                # Dependencias formales (SimPy, Pygame, SciPy, python-docx)
+│   ├── .env.example                    # Plantilla de configuracion para Google Gemini API
+│   └── README.md                       # Documentación técnica específica de Tarea 3
 ├── parcial1/                           # Evaluaciones y respuestas del Parcial I
 ├── parcial2/                           # Evaluaciones, calculadora y respuestas del Parcial II (Inventarios)
 │   ├── main.py                         # Punto de entrada (GUI interactiva / CLI examen)
@@ -89,6 +98,15 @@ Implementa una aplicación con arquitectura modular Top-Down Design e interfaz g
 * **Exportación de reportes:** Generación de archivos `.txt` en `tarea2/outputs/` con diagnósticos e interpretaciones económicas de decisión.
 * **Ubicación:** `tarea2/`
 
+### Tarea 3 — Simulador Dinámico de Redes de Computadoras (SimPy + Pygame + Algoritmo Húngaro + Gemini AI)
+Implementa un simulador estocástico interactivo y visual de redes de computadoras bajo arquitectura modular Top-Down POO:
+* **Teoría de Colas:** Modelado de colas finitas $M/M/1/K$ con disciplina FIFO, llegadas Poisson ($\lambda$), tiempos de servicio exponenciales ($\mu$) y verificación analítica de la Ley de Little ($L = \lambda_{\text{eff}} \cdot W$).
+* **Control de Inventarios en Buffers:** Modelado de colas de paquetes como almacenes bajo política $(s, Q)$, con cuantificación rigurosa de costos de almacenamiento (holding en RAM) y costos de ruptura/penalización por desborde (Buffer Overflow).
+* **Optimización y Balanceo de Carga (Algoritmo Húngaro):** Asignación óptima dinámica en tiempo real mediante minimización de la matriz de latencia y congestión, con resolución dual mediante SciPy y algoritmo nativo de Kuhn-Munkres $O(n^3)$.
+* **Auditoría Inteligente con Google Gemini:** Integración HTTP con la API de Google Gemini (`gemini-flash-latest`) para emitir diagnósticos y recomendaciones de optimización cuantitativa en tiempo real.
+* **Entregables Oficiales:** Generación automática de reporte plano `outputs/reporte_simulacion.txt`, captura gráfica e informe formal en Word `outputs/Informe_Tecnico_Simulador_Redes.docx`.
+* **Ubicación:** `tarea3/`
+
 ### Clase Simulación — Sistema Discreto: Juego Snake (SimPy + Pygame)
 Implementa un modelo de simulación por eventos discretos bajo el paradigma de Programación Orientada a Objetos (POO):
 * **Motor SimPy:** Modela procesos estocásticos y saltos discretos temporales para el movimiento de la serpiente, ciclo de vida de alimentos normales/bonus y muestreo de métricas.
@@ -147,6 +165,15 @@ Desde la raíz del repositorio:
 ```bash
 cd tarea2
 python main.py
+```
+
+### Ejecutar Tarea 3 (Simulador Dinámico de Redes - Pygame / Headless)
+
+Desde la raíz del repositorio:
+```bash
+cd tarea3
+python main.py                              # Modo grafico interactivo (Pygame a 60 FPS)
+python main.py --headless --duration 60     # Modo consola con auditoria de Gemini AI
 ```
 
 ### Ejecutar Clase Simulación (Snake SimPy + Pygame)
@@ -214,6 +241,12 @@ pytest tests/ -v
 ### Pruebas de Tarea 2
 ```bash
 cd tarea2
+pytest tests/ -v
+```
+
+### Pruebas de Tarea 3
+```bash
+cd tarea3
 pytest tests/ -v
 ```
 

@@ -127,26 +127,30 @@ El sistema implementa resolucion mediante SciPy (`linear_sum_assignment`) y cuen
    ```bash
    pip install -r requirements.txt
    ```
-3. (Opcional) Configurar clave de API en `.env`:
-   ```env
-   GEMINI_API_KEY=AIzaSy...
+3. (Opcional) Configurar clave de API de Google Gemini en `.env`:
+   ```bash
+   cp .env.example .env
    ```
-   *Nota: Si no se configura una clave, el Motor Experto Cuantitativo Local de Respaldo evalua automaticamente los resultados matematicos sin arrojar errores.*
+   Edita `.env` (puede ubicarse en `tarea3/.env` o en la raiz del repositorio `metodos_cuantitativos/.env`):
+   ```env
+   GEMINI_API_KEY=AIzaSy...tu_clave_de_gemini_aqui
+   ```
+   *Nota: El sistema detecta automaticamente la clave y consulta el modelo oficial `gemini-flash-latest`. Si no se configura una clave, el Motor Experto Cuantitativo Local de Respaldo evalua automaticamente las metricas sin fallos.*
 
 ---
 
 ## Guia de Uso
 
-### Modo Interactivo Visual (Pygame):
-Inicia la aplicacion visual completa a 60 FPS:
+### Modo Interactivo Visual (Pygame a 60 FPS):
+Inicia la aplicacion grafica completa con animacion en tiempo real de nodos, enlaces, paquetes estocasticos y panel de telemetria HUD:
 ```bash
 python main.py
 ```
 
 ### Modo por Lotes / Headless (Consola):
-Ejecuta la simulacion estocastica por un tiempo determinado y genera los reportes sin requerir interfaz grafica:
+Ejecuta la simulacion estocastica por consola y genera automaticamente el reporte plano `.txt` y el informe formal `.docx`:
 ```bash
-python main.py --headless --duration 120 --lambda 15.0 --mu 18.0 --capacidad-s 50
+python main.py --headless --duration 60 --lambda 15.0 --mu 18.0 --capacidad-s 50
 ```
 
 ---
