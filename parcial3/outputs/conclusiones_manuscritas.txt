@@ -1,0 +1,19 @@
+CONCLUSIONES - PARCIAL III
+
+PROBLEMA 1. FABRICA DE LAPTOPS (EVENTOS DISCRETOS)
+Cola M/M/1 con lambda=10 ordenes/h y mu=12 laptops/h, luego rho=lambda/mu=0.833.
+Formula Wq=lambda/(mu*(mu-lambda))=25.0 min; la simulacion de 8 h dio 27.2 min.
+Paradas de linea por falta de stock: 0. El umbral s=10 cubre de sobra el consumo
+durante el lead time (10 u/h por 0.25 h, o sea 2.5 unidades), asi que el inventario
+nunca se agota: esta sobredimensionado. El cuello de botella es la estacion unica,
+con 83.3% de utilizacion. Recomendacion: sumar una segunda estacion antes que
+tocar la politica de inventario.
+
+PROBLEMA 2. CLUSTER DE SERVIDORES (SIMULACION CONTINUA)
+Balance termico C*dT/dt=P_idle+k*trafico-h*(T-T_amb), integrado con RK4 a paso de
+1 s. Trafico Normal(3,1) truncado a [1,5] Gbps, resorteado cada 60 s.
+Equilibrio T_eq=T_amb+(P_idle+k*trafico)/h da 70 C con trafico medio, justo la
+temperatura de diseno. Simulado: media 70.0 C, desviacion 3.6 C, rango 58.5 a
+82.4 C. El throttling estuvo activo 49.6% del tiempo y la eficiencia
+global cayo a 87.1%, procesando 9.36 TB. El diseno no deja margen termico.
+Recomendacion: subir h de 20 a 22.5 W/C para bajar T_eq a 65 C.

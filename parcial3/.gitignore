@@ -1,0 +1,23 @@
+# Secretos
+.env
+
+# Cache interna de metricas entre corridas (artefacto de trabajo, no entregable).
+# Los entregables de outputs/ -- reportes .txt, trazas y conclusiones -- SI se
+# versionan: son lo que se entrega del parcial.
+outputs/metricas_problema*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Sistema operativo
+.DS_Store

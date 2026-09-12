@@ -1,0 +1,156 @@
+======================================================================
+UNIVERSIDAD JOSE ANTONIO PAEZ - FACULTAD DE INGENIERIA
+ESCUELA DE INGENIERIA EN COMPUTACION
+METODOS CUANTITATIVOS - PARCIAL III - SIMULACION
+======================================================================
+PROBLEMA 1: FABRICA DE LAPTOPS
+Simulacion de eventos discretos (SimPy) sobre una cola M/M/1 con
+inventario de procesadores bajo politica de revision continua (s, Q).
+======================================================================
+
+1. PARAMETROS DE ENTRADA
+----------------------------------------------------------------------
+Periodo simulado                      : 8.00 horas (28800 s)
+Semilla de reproducibilidad           : 2026
+Tasa de llegada de ordenes (lambda)   : 10.00 ordenes/hora
+Media de ensamblaje                   : 5.00 min/laptop
+Tasa de servicio (mu)                 : 12.00 laptops/hora
+Estaciones de ensamblaje (c)          : 1
+Stock inicial de procesadores         : 50 unidades  [SUPUESTO PROPIO]
+Umbral critico de reposicion (s)      : 10 unidades
+Tamano del lote de reposicion (Q)     : 50 unidades
+Lead time del proveedor               : 15.00 min
+Consumo por laptop ensamblada         : 1 procesador(es)  [SUPUESTO PROPIO]
+Lote de produccion de referencia      : 50 laptops
+
+NOTA SOBRE LOS SUPUESTOS: el enunciado no fija el stock inicial de
+procesadores ni cuantos consume cada laptop. Se adoptaron 50 unidades
+iniciales (un lote completo) y 1 procesador por laptop. Los dos valores
+quedan declarados aca de forma explicita por transparencia metodologica.
+
+2. VALORES TEORICOS M/M/1 (FORMULAS CERRADAS)
+----------------------------------------------------------------------
+Factor de utilizacion
+    rho = lambda / mu
+    rho = 10.0000 / 12.0000
+    rho = 0.833333
+Probabilidad de sistema vacio
+    P0 = 1 - rho
+    P0 = 1 - 0.833333
+    P0 = 0.166667
+Ordenes esperadas en el sistema
+    L = rho / (1 - rho)
+    L = 0.833333 / (1 - 0.833333)
+    L = 5.000000
+Ordenes esperadas en cola
+    Lq = rho^2 / (1 - rho)
+    Lq = 0.833333^2 / (1 - 0.833333)
+    Lq = 4.166667
+Tiempo promedio en el sistema
+    W = 1 / (mu - lambda)
+    W = 1 / (12.0000 - 10.0000)
+    W = 0.500000 h = 30.0000 min
+Tiempo promedio en cola
+    Wq = lambda / (mu * (mu - lambda))
+    Wq = 10.0000 / (12.0000 * (12.0000 - 10.0000))
+    Wq = 0.416667 h = 25.0000 min
+
+3. METRICAS OBTENIDAS EN LA SIMULACION
+----------------------------------------------------------------------
+Ordenes generadas                     : 79
+Laptops completadas                   : 77
+Ordenes aun en el sistema al cierre   : 2
+
+Tiempo de espera promedio de las ordenes (Wq):
+    Simulado                          : 27.2488 min (0.454146 h)
+    Teorico M/M/1                     : 25.0000 min
+    Desviacion contra el teorico      : +9.00 %
+
+Tiempo promedio en el sistema (W):
+    Simulado                          : 32.8591 min
+    Teorico M/M/1                     : 30.0000 min
+
+Ocupacion promedio:
+    Ordenes en cola (Lq) simulado     : 4.4064
+    Ordenes en cola (Lq) teorico      : 4.1667
+    Ordenes en sistema (L) simulado   : 5.3196
+    Ordenes en sistema (L) teorico    : 5.0000
+    Utilizacion de la estacion        : 90.00 % (rho teorico 83.33 %)
+
+4. TIEMPO TOTAL QUE TOMA DESPACHAR UN LOTE
+----------------------------------------------------------------------
+El enunciado admite dos lecturas de esta metrica. Se reportan las dos,
+etiquetadas sin ambiguedad:
+
+(a) Ciclo de reposicion de componentes
+    Tiempo desde que se dispara el pedido al proveedor hasta que
+    ingresan las 50 unidades al inventario.
+    Promedio observado                : 15.0000 min
+    Ciclos observados                 : 1
+    Valor nominal (lead time)         : 15.00 min
+
+(b) Tiempo de despacho de un lote de produccion
+    Tiempo en completar 50 laptops terminadas.
+    Promedio observado                : 349.1939 min (5.8199 h)
+    Lotes completos observados        : 1
+
+5. INVENTARIO Y CONTINUIDAD DE LA LINEA
+----------------------------------------------------------------------
+Veces que la linea se detuvo por falta de stock : 0
+Ordenes retrasadas por falta de inventario      : 0
+Tiempo total de linea detenida                  : 0.0000 min
+Pedidos de reposicion disparados                : 1
+Lotes recibidos del proveedor                   : 1
+Unidades consumidas                             : 78
+Unidades recibidas                              : 50
+Nivel de stock al cierre                        : 22 unidades
+Nivel minimo alcanzado                          : 8 unidades
+
+Eficiencia en el reabastecimiento:
+    Definicion adoptada: fraccion del tiempo simulado en que la linea
+    NO estuvo detenida por falta de procesadores.
+        eficiencia = 1 - (tiempo_linea_detenida / tiempo_total)
+    Valor obtenido                    : 100.00 %
+
+6. LECTURA DEL RESULTADO
+----------------------------------------------------------------------
+La estacion opera con rho = 0.8333, es decir al 83.3 % de su capacidad.
+Con un solo servidor y una utilizacion tan alta, la cola es sensible a
+cualquier incremento de lambda: el cuello de botella del sistema es la
+estacion de ensamblaje, no el inventario.
+
+Sobre el inventario, el consumo esperado durante el lead time es:
+    consumo = lambda * consumo_por_laptop * lead_time
+    consumo = 10.00 * 1 * 0.2500 h = 2.50 unidades
+Ese valor esta muy por debajo del umbral critico s = 10, de modo que
+el pedido llega mucho antes de que el stock se agote.
+
+Por eso la simulacion reporta CERO paradas de linea por falta de stock.
+No es un defecto del modelo ni un error de la corrida: es la conclusion
+correcta con los parametros del enunciado. El inventario esta
+sobredimensionado respecto del consumo real, y la politica (s, Q) podria
+relajarse sin riesgo de desabastecimiento.
+
+======================================================================
+
+
+======================================================================
+RESPUESTA DE LA API DE IA - CONCLUSION Y RECOMENDACION (GOOGLE GEMINI (API OFICIAL))
+======================================================================
+1. Conclusion sobre el desempeno de la linea de ensamblaje y la teoria de colas.
+La linea opera en un regimen de trafico pesado, con una utilizacion critica que la posiciona como el cuello de botella absoluto del proceso productivo. Las discrepancias observadas entre la simulacion y el estado estacionario teorico se explican por la corta duracion del horizonte simulado y la inherente volatilidad estocastica de los procesos poissonianos. En esta zona de saturacion, cualquier incremento menor en la tasa de llegadas detonara un crecimiento exponencial en las demoras y el inventario en proceso, evidenciando una alta vulnerabilidad ante picos de demanda.
+
+2. Conclusion sobre la politica de inventario y el reabastecimiento.
+La politica de inventario es excesivamente conservadora y esta sobredimensionada para la velocidad real del proceso. El punto de reorden supera con creces el consumo probable durante el tiempo de entrega del proveedor, lo que garantiza una continuidad operativa perfecta a expensas de inmovilizar capital innecesario en procesadores. El suministro no impone ninguna restriccion al flujo de ensamble, y el inventario de seguridad podria reducirse significativamente sin inducir riesgo de desabastecimiento.
+
+3. Tres recomendaciones concretas de optimizacion, priorizadas.
+
+Prioridad 1: Aliviar el cuello de botella de ensamble.
+Se debe transicionar de una configuracion M/M/1 a un esquema multimaster (M/M/c) agregando una segunda estacion o, en su defecto, reducir el tiempo de ciclo mediante balanceo de linea y estandarizacion de tareas. Bajar la tasa de utilizacion a un rango operativo seguro disminuira drasticamente los tiempos de espera no lineales de las ordenes.
+
+Prioridad 2: Recalibrar los parametros de la politica de inventario (s, Q).
+Es preciso reajustar el umbral de reposicion y el tamano de lote a valores mas acordes con la demanda durante el tiempo de entrega y la variabilidad estadistica real. Esto liberara costos de almacenamiento y capital de trabajo sin degradar el nivel de servicio del 100%.
+
+Prioridad 3: Robustecer la metodologia experimental y la programacion de lotes.
+El despacho de lotes de referencia debe desacoplarse del tamano de reabastecimiento y alinearse con la capacidad por turno. Asimismo, para efectos de auditoria y diseno de planta, se deben ejecutar simulaciones multireplica con periodo de calentamiento para eliminar el sesgo transitorio inicial y obtener intervalos
+======================================================================

@@ -1,0 +1,113 @@
+======================================================================
+UNIVERSIDAD JOSE ANTONIO PAEZ - FACULTAD DE INGENIERIA
+ESCUELA DE INGENIERIA EN COMPUTACION
+METODOS CUANTITATIVOS - PARCIAL III - SIMULACION
+======================================================================
+PROBLEMA 2: CLUSTER DE SERVIDORES
+Simulacion continua del balance termico y del rendimiento, resuelta
+con Runge-Kutta de cuarto orden.
+======================================================================
+
+1. PARAMETROS DE ENTRADA
+----------------------------------------------------------------------
+Periodo simulado                      : 8.00 horas (28800 s)
+Semilla de reproducibilidad           : 2026
+Paso de integracion RK4               : 1.00 s
+Re-sorteo del trafico                 : cada 60 s (retencion de orden cero)
+Trafico entrante                      : Normal(3.0, 1.0) truncada a [1.0, 5.0] Gbps
+Temperatura ambiente (T_amb)          : 25.00 C
+Temperatura de diseno                 : 70.00 C
+Temperatura inicial                   : 70.00 C
+Coeficiente de disipacion (h)         : 20.00 W/C
+Potencia en reposo (P_idle)           : 360.00 W
+Potencia por Gbps (k)                 : 180.00 W/Gbps
+Capacidad termica (C)                 : 2400.00 J/C
+Constante de tiempo (tau = C/h)       : 120.00 s
+
+2. MODELO MATEMATICO
+----------------------------------------------------------------------
+Balance termico de primer orden:
+    C * dT/dt = P_idle + k * trafico - h * (T - T_amb)
+
+Temperatura de equilibrio con trafico constante:
+    T_eq = T_amb + (P_idle + k * trafico) / h
+    Trafico 1 Gbps -> T_eq = 52.00 C
+    Trafico 3 Gbps -> T_eq = 70.00 C  (temperatura de diseno)
+    Trafico 5 Gbps -> T_eq = 88.00 C
+
+Eficiencia con thermal throttling:
+    eta(T) = 0.90                                si T <= 70
+    eta(T) = max(0.30, 0.90 - 0.02 * (T - 70))   si T > 70
+
+Rendimiento entregado:
+    throughput = trafico * eta(T)
+    datos acumulados = integral de throughput en el tiempo
+
+3. DATOS PROCESADOS
+----------------------------------------------------------------------
+Total en Gigabits                     : 74903.91 Gb
+Total en Gigabytes                    : 9362.99 GB
+Total en Terabytes                    : 9.3630 TB
+
+4. VARIABILIDAD DE LA TEMPERATURA
+----------------------------------------------------------------------
+Temperatura media                     : 70.0004 C
+Desviacion estandar                   : 3.6247 C
+Temperatura minima                    : 58.5410 C
+Temperatura maxima                    : 82.3883 C
+Temperatura al cierre                 : 78.2638 C
+Muestras tomadas (1 por segundo)      : 28801
+
+5. EFICIENCIA GLOBAL DE LA RED
+----------------------------------------------------------------------
+Eficiencia global (eta ponderada en el tiempo) : 87.08 %
+Trafico medio ofrecido                        : 3.0039 Gbps
+Throughput medio entregado                    : 2.6008 Gbps
+Perdida TOTAL contra el trafico ofrecido      : 13.42 %
+   de la cual, ineficiencia base (eta = 0.90) : 10.00 %
+   de la cual, atribuible al throttling       : 3.24 %
+
+   La ineficiencia base existe aunque el cluster este frio: eta vale 0.90
+   incluso a 70 C o menos. Solo la segunda componente es recuperable
+   mejorando la refrigeracion.
+
+6. THERMAL THROTTLING
+----------------------------------------------------------------------
+Porcentaje del tiempo con throttling activo (T > 70 C) : 49.58 %
+Tiempo acumulado con throttling               : 14280 s (3.97 h)
+
+7. LECTURA DEL RESULTADO
+----------------------------------------------------------------------
+El cluster esta calibrado para que el trafico medio de 3.0 Gbps lo
+deje exactamente en la temperatura de diseno de 70 C. La media observada fue de
+70.00 C, consistente con esa calibracion.
+
+La desviacion estandar de 3.62 C refleja la variabilidad del trafico filtrada
+por la inercia termica del sistema (tau = 120 s). La temperatura se movio
+entre 58.54 C y 82.39 C, dentro de los equilibrios extremos que
+corresponden a 1 y 5 Gbps.
+
+El throttling estuvo activo el 49.58 % del tiempo. Como el diseno deja el
+equilibrio medio justo en el limite de 70 C, cualquier pico de trafico por
+encima de la media empuja al sistema a la zona de penalizacion. El diseno
+no tiene margen termico.
+
+El resultado neto es una eficiencia global del 87.08 % frente al 90 % nominal,
+es decir una perdida del 3.24 % atribuible al throttling. Contra el trafico
+ofrecido la perdida total es del 13.42 %, pero esa cifra incluye los 10 puntos
+de ineficiencia base del equipo, que no dependen de la temperatura.
+Aumentar el coeficiente de disipacion h es la palanca directa: baja T_eq de
+forma proporcional y recupera eficiencia sin tocar la carga.
+
+======================================================================
+
+
+======================================================================
+RESPUESTA DE LA API DE IA - CONCLUSION Y RECOMENDACION (GOOGLE GEMINI (API OFICIAL))
+======================================================================
+1. Conclusion sobre el comportamiento termico y la estabilidad del equilibrio.
+El sistema muestra una dinamica estable alrededor de su valor medio, pero adolece de un diseno con margen de seguridad termica nulo. La inercia del cluster atenua las variaciones rapidas de carga, pero al haber fijado la temperatura de equilibrio del trafico promedio exactamente en el umbral critico de penalizacion, cualquier variacion positiva de la demanda desplaza de inmediato al equipo hacia una condicion de sobrecalentamiento. El cluster carece de resiliencia frente a la variabilidad de la carga de trabajo.
+
+2. Conclusion sobre el impacto del thermal throttling en el rendimiento entregado.
+El cluster permanece degradado durante casi la mitad de su tiempo de operacion. Esta penalizacion por temperatura impacta al sistema en el peor momento posible: cuando el trafico es mas alto y se requiere el maximo rendimiento de procesamiento. Aunque existe una ineficiencia propia de la arquitectura computacional que es fija, la perdida de capacidad asociada al estrangulamiento termico es un desperdicio neto atribuible de forma exclusiva a una refrigeracion insuficiente frente a la dispersion de la carga
+======================================================================

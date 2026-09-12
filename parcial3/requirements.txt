@@ -1,0 +1,20 @@
+# Parcial III - Metodos Cuantitativos
+# Instalacion:  python3 -m pip install -r requirements.txt
+
+# --- Nucleo de simulacion ---
+simpy>=4.1.1            # Motor de eventos discretos del Problema 1
+requests>=2.31.0        # Cliente HTTP para la API de IA
+python-dotenv>=1.0.0    # Carga de .env (la cascada propia esta en src/utils/config.py)
+
+# --- Capa grafica (bonus, opcion [4] del menu) ---
+pygame>=2.6.0           # Animacion Pygame
+
+# --- Calculo numerico ---
+# El nucleo resuelve la EDO con RK4 propio y la estadistica con el modulo
+# `statistics` de la biblioteca estandar, asi que numpy no es obligatorio para
+# correr la simulacion. Se lista porque la capa grafica lo usa para el
+# oscilograma y para el manejo de superficies.
+numpy>=1.26.0
+
+# --- Pruebas ---
+pytest>=8.0.0
