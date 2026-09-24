@@ -1,0 +1,6 @@
+{
+  "descripcion": "Parcial IV - Ejercicio 2: Max Z = 80x1 + 45x2",
+  "c": [80, 45],
+  "A": [[1, 1], [12, 5]],
+  "b": [7, 60]
+}

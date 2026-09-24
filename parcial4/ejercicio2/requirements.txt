@@ -1,0 +1,4 @@
+# Parcial IV - Ejercicio 2
+# Instalacion:  python3 -m pip install -r requirements.txt
+scipy>=1.11.0     # linprog (relajacion lineal de cada nodo) y milp (verificacion en tests)
+pytest>=8.0.0

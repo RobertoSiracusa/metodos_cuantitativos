@@ -45,6 +45,11 @@ metodos_cuantitativos/
 │   ├── respuestaPregunta1.md           # Respuesta escrita Ejercicio 1 (EOQ)
 │   ├── respuestaPregunta2.md           # Respuesta escrita Ejercicio 2 (Quiebre de precios)
 │   └── respuestaPregunta3.md           # Respuesta escrita Ejercicio 3 (Restricciones)
+├── parcial4/                           # Parcial IV: Programación Entera (un proyecto CLI por ejercicio)
+│   ├── ejercicio1.md                   # Verdadero/Falso justificado
+│   ├── ejercicio2/                     # Ramificación y acotamiento (main.py, src/, tests/, README, ejercicio2.md)
+│   ├── ejercicio3/                     # Ubicación de estaciones - cubrimiento de conjuntos
+│   └── ejercicio4/                     # Problema de la mochila 0/1
 ├── claseSimulacion/                    # Simulacion de Eventos Discretos: Juego Snake (SimPy + Pygame en POO)
 │   ├── main.py                         # Punto de entrada (Modo manual, Auto IA, Headless)
 │   ├── src/                            # Arquitectura POO: models, simulation, view, engine
@@ -106,6 +111,14 @@ Implementa un simulador estocástico interactivo y visual de redes de computador
 * **Auditoría Inteligente con Google Gemini:** Integración HTTP con la API de Google Gemini (`gemini-flash-latest`) para emitir diagnósticos y recomendaciones de optimización cuantitativa en tiempo real.
 * **Entregables Oficiales:** Generación automática de reporte plano `outputs/reporte_simulacion.txt`, captura gráfica e informe formal en Word `outputs/Informe_Tecnico_Simulador_Redes.docx`.
 * **Ubicación:** `tarea3/`
+
+### Parcial IV — Programación Entera (Ramificación y Acotamiento, Cubrimiento, Mochila)
+Resuelve el Parcial IV con un proyecto CLI independiente por ejercicio (`main.py`, `src/core`, `src/services`, `tests/`, `README.md` y respuesta `.md` para el examen escrito):
+* **Ejercicio 1:** Verdadero/Falso sobre programación entera, justificado (`ejercicio1.md`).
+* **Ejercicio 2 — Ramificación y acotamiento:** implementación propia que resuelve la relajación lineal de cada nodo con `linprog`, ramifica, poda y dibuja el árbol. Óptimo: $x_1 = 3$, $x_2 = 4$, $Z = 420$.
+* **Ejercicio 3 — Ubicación de estaciones (Set Covering):** modelo binario con `milp` sobre una tabla de tiempos no simétrica (40 min ida y vuelta). Mínimo: 3 estaciones (ciudades 2, 3 y 9), con 48 combinaciones óptimas.
+* **Ejercicio 4 — Mochila 0/1:** programación dinámica propia verificada con `milp` y comparada con la heurística voraz. Valor máximo: \$270 (objetos 2, 3 y 6).
+* **Ubicación:** `parcial4/`
 
 ### Clase Simulación — Sistema Discreto: Juego Snake (SimPy + Pygame)
 Implementa un modelo de simulación por eventos discretos bajo el paradigma de Programación Orientada a Objetos (POO):
@@ -174,6 +187,15 @@ Desde la raíz del repositorio:
 cd tarea3
 python main.py                              # Modo grafico interactivo (Pygame a 60 FPS)
 python main.py --headless --duration 60     # Modo consola con auditoria de Gemini AI
+```
+
+### Ejecutar Parcial IV (Programación Entera - CLI)
+
+Desde la raíz del repositorio (requiere `scipy`, ver `requirements.txt` de cada ejercicio):
+```bash
+python parcial4/ejercicio2/main.py                               # Ramificación y acotamiento
+python parcial4/ejercicio3/main.py --sentido ida_vuelta          # Ubicación de estaciones
+python parcial4/ejercicio4/main.py --capacidad 50                # Mochila 0/1
 ```
 
 ### Ejecutar Clase Simulación (Snake SimPy + Pygame)
@@ -248,6 +270,13 @@ pytest tests/ -v
 ```bash
 cd tarea3
 pytest tests/ -v
+```
+
+### Pruebas de Parcial IV
+```bash
+pytest parcial4/ejercicio2/tests/ -v
+pytest parcial4/ejercicio3/tests/ -v
+pytest parcial4/ejercicio4/tests/ -v
 ```
 
 ### Pruebas de Clase Simulación

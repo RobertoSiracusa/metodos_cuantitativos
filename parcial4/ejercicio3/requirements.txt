@@ -1,0 +1,5 @@
+# Parcial IV - Ejercicio 3
+# Instalacion:  python3 -m pip install -r requirements.txt
+numpy>=1.26.0     # matriz de tiempos y de cobertura
+scipy>=1.11.0     # milp (programacion lineal entera binaria)
+pytest>=8.0.0

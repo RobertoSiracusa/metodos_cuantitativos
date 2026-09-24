@@ -1,0 +1,6 @@
+{
+  "descripcion": "Parcial IV - Ejercicio 4: 6 objetos, capacidad 50 kg",
+  "capacidad": 50,
+  "pesos": [10, 20, 15, 25, 30, 12],
+  "valores": [60, 100, 90, 120, 150, 80]
+}
