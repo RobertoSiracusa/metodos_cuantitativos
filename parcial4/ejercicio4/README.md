@@ -71,6 +71,49 @@ python3 main.py --datos otros.json --sin-exportar
 python3 -m pytest tests/ -q              # pruebas
 ```
 
+## Salida por terminal
+
+Salida de `python3 main.py` con los datos del parcial:
+
+```text
+$ python3 main.py
+EJERCICIO 4 - PROBLEMA DE LA MOCHILA
+====================================
+
+MODELO
+------
+xi = 1 si el objeto i entra en la mochila, 0 si no
+Max Z = 60x1 + 100x2 + 90x3 + 120x4 + 150x5 + 80x6
+s.a.
+  10x1 + 20x2 + 15x3 + 25x4 + 30x5 + 12x6 <= 50
+  xi en {0, 1}
+
+Objeto  Peso  Valor  Valor/kg
+     1    10     60      6.00
+     2    20    100      5.00
+     3    15     90      6.00
+     4    25    120      4.80
+     5    30    150      5.00
+     6    12     80      6.67
+
+RESULTADO
+---------
+Programacion dinamica: objetos 1, 3, 4 | peso 50 kg | valor $270
+  x = (1, 0, 1, 1, 0, 0)
+Verificacion milp:     objetos 2, 3, 6 | peso 47 kg | valor $270
+Coinciden en valor: SI
+
+Combinaciones que alcanzan $270: 2
+  objetos 2, 3, 6    peso 47 kg (libres 3 kg)
+  objetos 1, 3, 4    peso 50 kg (libres 0 kg)
+Recomendada (mismo valor, menor peso): objetos 2, 3, 6
+
+Heuristica voraz (mayor valor/kg): objetos 1, 3, 6 | peso 37 kg | valor $230
+Diferencia contra el optimo: $40
+
+Reporte guardado en: outputs/reporte_ejercicio4.txt
+```
+
 ## Resultado
 
 **Valor máximo: $270.** Hay dos combinaciones que lo alcanzan:

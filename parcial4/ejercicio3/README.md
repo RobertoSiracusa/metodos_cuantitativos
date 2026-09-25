@@ -72,6 +72,111 @@ python3 main.py --datos otra_tabla.json --sin-exportar
 python3 -m pytest tests/ -q                    # pruebas
 ```
 
+## Salida por terminal
+
+Salida de `python3 main.py` con los datos del parcial:
+
+```text
+$ python3 main.py
+EJERCICIO 3 - UBICACION DE ESTACIONES (CUBRIMIENTO DE CONJUNTOS)
+================================================================
+
+MODELO
+------
+xj = 1 si se construye una estacion en la ciudad j, 0 si no
+Criterio de cobertura (ida_vuelta): t(ciudad -> estacion) <= limite y t(estacion -> ciudad) <= limite, limite = 40 min
+
+Min Z = x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10
+s.a.
+  Ciudad  1: x1 + x2 + x3 + x4 + x5 + x10 >= 1
+  Ciudad  2: x1 + x2 + x4 + x5 + x7 + x8 + x10 >= 1
+  Ciudad  3: x1 + x3 + x4 + x6 + x8 >= 1
+  Ciudad  4: x1 + x2 + x3 + x4 + x6 + x7 + x10 >= 1
+  Ciudad  5: x1 + x2 + x5 + x6 + x10 >= 1
+  Ciudad  6: x3 + x4 + x5 + x6 + x7 + x10 >= 1
+  Ciudad  7: x2 + x4 + x6 + x7 + x9 >= 1
+  Ciudad  8: x2 + x3 + x8 + x9 >= 1
+  Ciudad  9: x7 + x8 + x9 + x10 >= 1
+  Ciudad 10: x1 + x2 + x4 + x5 + x6 + x9 + x10 >= 1
+  xj en {0, 1}
+
+RESULTADO
+---------
+Minimo de estaciones: 3
+Ubicacion: ciudades 2, 3, 9
+
+Estacion -> ciudades que cubre
+   2 -> 1, 2, 4, 5, 7, 8, 10
+   3 -> 1, 3, 4, 6, 8
+   9 -> 7, 8, 9, 10
+
+Ciudad -> estacion asignada (la mas cercana ida + vuelta)
+   1 ->  3  (ida 20 min, vuelta 20 min)
+   2 ->  2  (ida 0 min, vuelta 0 min)
+   3 ->  3  (ida 0 min, vuelta 0 min)
+   4 ->  3  (ida 15 min, vuelta 15 min)
+   5 ->  2  (ida 20 min, vuelta 20 min)
+   6 ->  3  (ida 20 min, vuelta 20 min)
+   7 ->  9  (ida 20 min, vuelta 35 min)
+   8 ->  3  (ida 34 min, vuelta 0 min)
+   9 ->  9  (ida 0 min, vuelta 0 min)
+  10 ->  9  (ida 20 min, vuelta 24 min)
+
+Combinaciones optimas de 3 estaciones: 48
+  {1, 2, 7}
+  {1, 2, 10}
+  {1, 3, 7}
+  {1, 3, 9}
+  {1, 4, 8}
+  {1, 4, 9}
+  {1, 5, 9}
+  {1, 6, 8}
+  {1, 6, 9}
+  {1, 7, 8}
+  {1, 7, 9}
+  {1, 9, 10}
+  {2, 3, 7}
+  {2, 3, 8}
+  {2, 3, 9}
+  {2, 3, 10}
+  {2, 4, 7}
+  {2, 4, 8}
+  {2, 4, 9}
+  {2, 4, 10}
+  {2, 5, 8}
+  {2, 6, 7}
+  {2, 6, 8}
+  {2, 6, 9}
+  {2, 6, 10}
+  {2, 7, 8}
+  {2, 8, 10}
+  {3, 4, 10}
+  {3, 5, 7}
+  {3, 5, 9}
+  {3, 6, 7}
+  {3, 6, 8}
+  {3, 6, 10}
+  {3, 7, 10}
+  {3, 9, 10}
+  {4, 5, 8}
+  {4, 5, 9}
+  {4, 6, 8}
+  {4, 6, 9}
+  {4, 8, 10}
+  {4, 9, 10}
+  {5, 6, 8}
+  {5, 6, 9}
+  {5, 7, 8}
+  {6, 8, 10}
+  {6, 9, 10}
+  {7, 8, 10}
+  {8, 9, 10}
+
+Con 2 estaciones NO se cubren todas las ciudades.
+
+Reporte guardado en: outputs/reporte_ejercicio3.txt
+```
+
 ## Resultado
 
 **Mínimo: 3 estaciones, en las ciudades 2, 3 y 9.**

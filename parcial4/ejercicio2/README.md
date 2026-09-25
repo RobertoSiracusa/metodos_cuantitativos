@@ -75,6 +75,50 @@ Formato de `--datos` (maximización con restricciones `<=` y variables `>= 0`):
 { "c": [80, 45], "A": [[1, 1], [12, 5]], "b": [7, 60] }
 ```
 
+## Salida por terminal
+
+Salida de `python3 main.py` con los datos del parcial:
+
+```text
+$ python3 main.py
+EJERCICIO 2 - RAMIFICACION Y ACOTAMIENTO
+========================================
+
+MODELO
+------
+Max Z = 80x1 + 45x2
+s.a.
+  x1 + x2 <= 7
+  12x1 + 5x2 <= 60
+  x1, x2 >= 0 y enteras
+
+NODOS (en orden de exploracion)
+-------------------------------
+P0  [relajacion lineal]  x = (3.5714, 3.4286)  Z = 440  -> RAMIFICADO en x1 = 3.5714
+P1  [x1 <= 3]  x = (3, 4)  Z = 420  -> ENTERA (mejor solucion hasta ahora)
+P2  [x1 >= 4]  x = (4, 2.4)  Z = 428  -> RAMIFICADO en x2 = 2.4000
+P3  [x2 <= 2]  x = (4.1667, 2)  Z = 423.3333  -> RAMIFICADO en x1 = 4.1667
+P5  [x1 <= 4]  x = (4, 2)  Z = 410  -> PODADO (Z = 410.00 <= 420.00)
+P6  [x1 >= 5]  x = (5, 0)  Z = 400  -> PODADO (Z = 400.00 <= 420.00)
+P4  [x2 >= 3]  infactible  -> INFACTIBLE
+
+ARBOL
+-----
+P0 (3.5714, 3.4286) Z=440  RAMIFICADO en x1 = 3.5714
+|-- [x1 <= 3] P1 (3, 4) Z=420  ENTERA (mejor solucion hasta ahora)
+`-- [x1 >= 4] P2 (4, 2.4) Z=428  RAMIFICADO en x2 = 2.4000
+    |-- [x2 <= 2] P3 (4.1667, 2) Z=423.3333  RAMIFICADO en x1 = 4.1667
+    |   |-- [x1 <= 4] P5 (4, 2) Z=410  PODADO (Z = 410.00 <= 420.00)
+    |   `-- [x1 >= 5] P6 (5, 0) Z=400  PODADO (Z = 400.00 <= 420.00)
+    `-- [x2 >= 3] P4 infactible  INFACTIBLE
+
+RESULTADO
+---------
+x1 = 3 ; x2 = 4 ; Z optimo = 420
+
+Reporte guardado en: outputs/reporte_ejercicio2.txt
+```
+
 ## Resultado
 
 | Nodo | Rama     | Solución       | Z      | Estado     |
