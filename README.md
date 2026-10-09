@@ -50,6 +50,10 @@ metodos_cuantitativos/
 │   ├── ejercicio2/                     # Ramificación y acotamiento (main.py, src/, tests/, README, ejercicio2.md)
 │   ├── ejercicio3/                     # Ubicación de estaciones - cubrimiento de conjuntos
 │   └── ejercicio4/                     # Problema de la mochila 0/1
+├── parcial5/                           # Parcial V: Programación Dinámica (un proyecto CLI por ejercicio)
+│   ├── ejercicio1.md                   # Verdadero/Falso justificado
+│   ├── ejercicio2/                     # Ruta más corta: etapas, Floyd-Warshall y Bellman-Ford
+│   └── ejercicio3/                     # Volumen de carga (VolumenCarga por etapas)
 ├── claseSimulacion/                    # Simulacion de Eventos Discretos: Juego Snake (SimPy + Pygame en POO)
 │   ├── main.py                         # Punto de entrada (Modo manual, Auto IA, Headless)
 │   ├── src/                            # Arquitectura POO: models, simulation, view, engine
@@ -119,6 +123,13 @@ Resuelve el Parcial IV con un proyecto CLI independiente por ejercicio (`main.py
 * **Ejercicio 3 — Ubicación de estaciones (Set Covering):** modelo binario con `milp` sobre una tabla de tiempos no simétrica (40 min ida y vuelta). Mínimo: 3 estaciones (ciudades 2, 3 y 9), con 48 combinaciones óptimas.
 * **Ejercicio 4 — Mochila 0/1:** programación dinámica propia verificada con `milp` y comparada con la heurística voraz. Valor máximo: \$270 (objetos 2, 3 y 6).
 * **Ubicación:** `parcial4/`
+
+### Parcial V — Programación Dinámica (Ruta más corta, Volumen de carga)
+Resuelve el Parcial V con la misma estructura del Parcial IV: un proyecto CLI por ejercicio y una respuesta `.md` para el examen escrito:
+* **Ejercicio 1:** Verdadero/Falso sobre programación dinámica, justificado (`ejercicio1.md`).
+* **Ejercicio 2 — Ruta más corta (13 nodos):** recursión por etapas hacia adelante y hacia atrás, Floyd-Warshall y Bellman-Ford propios, verificados con `scipy.sparse.csgraph`. Ruta óptima: 1-3-5-7-10-13, total 430.
+* **Ejercicio 3 — Volumen de carga (10 kg):** clase `VolumenCarga` con tablas por etapa, verificada con `milp`. Óptimo: Tablet, Dron y Proyector, 9 kg, \$155.
+* **Ubicación:** `parcial5/`
 
 ### Clase Simulación — Sistema Discreto: Juego Snake (SimPy + Pygame)
 Implementa un modelo de simulación por eventos discretos bajo el paradigma de Programación Orientada a Objetos (POO):
@@ -196,6 +207,16 @@ Desde la raíz del repositorio (requiere `scipy`, ver `requirements.txt` de cada
 python parcial4/ejercicio2/main.py                               # Ramificación y acotamiento
 python parcial4/ejercicio3/main.py --sentido ida_vuelta          # Ubicación de estaciones
 python parcial4/ejercicio4/main.py --capacidad 50                # Mochila 0/1
+```
+
+### Ejecutar Parcial V (Programación Dinámica - CLI)
+
+Desde la raíz del repositorio (requiere `scipy`, ver `requirements.txt` de cada ejercicio):
+```bash
+python parcial5/ejercicio2/main.py                               # Ruta más corta (etapas, Floyd-Warshall, Bellman-Ford)
+python parcial5/ejercicio2/main.py --origen 4 --destino 13       # Otro par de nodos
+python parcial5/ejercicio3/main.py                               # Volumen de carga (10 kg)
+python parcial5/ejercicio3/main.py --capacidad 14                # Otra capacidad
 ```
 
 ### Ejecutar Clase Simulación (Snake SimPy + Pygame)
@@ -277,6 +298,12 @@ pytest tests/ -v
 pytest parcial4/ejercicio2/tests/ -v
 pytest parcial4/ejercicio3/tests/ -v
 pytest parcial4/ejercicio4/tests/ -v
+```
+
+### Pruebas de Parcial V
+```bash
+pytest parcial5/ejercicio2/tests/ -v
+pytest parcial5/ejercicio3/tests/ -v
 ```
 
 ### Pruebas de Clase Simulación

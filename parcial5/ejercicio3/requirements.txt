@@ -1,0 +1,4 @@
+# Parcial V - Ejercicio 3
+# Instalacion:  python3 -m pip install -r requirements.txt
+scipy>=1.11.0     # milp (verificacion del optimo de la programacion dinamica)
+pytest>=8.0.0

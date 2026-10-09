@@ -1,0 +1,4 @@
+# Parcial V - Ejercicio 2
+# Instalacion:  python3 -m pip install -r requirements.txt
+scipy>=1.11.0     # shortest_path FW/BF (verificacion de la ruta minima)
+pytest>=8.0.0

@@ -1,0 +1,10 @@
+{
+  "descripcion": "Parcial V - Ejercicio 3: stand en feria, capacidad 10 kg",
+  "capacidad": 10,
+  "productos": [
+    {"nombre": "Tablet Samsung", "peso": 2, "precio": 40},
+    {"nombre": "Dron DJI Mini", "peso": 3, "precio": 50},
+    {"nombre": "Proyector portatil", "peso": 4, "precio": 65},
+    {"nombre": "Laptop ASUS ZenBook", "peso": 5, "precio": 60}
+  ]
+}
