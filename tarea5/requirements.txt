@@ -1,0 +1,2 @@
+# Tarea 5 - Instalacion:  python3 -m pip install -r requirements.txt
+pytest>=8.0.0

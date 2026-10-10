@@ -37,6 +37,11 @@ metodos_cuantitativos/
 │   ├── requirements.txt                # Dependencias formales (SimPy, Pygame, SciPy, python-docx)
 │   ├── .env.example                    # Plantilla de configuracion para Google Gemini API
 │   └── README.md                       # Documentación técnica específica de Tarea 3
+├── tarea5/                             # Tarea 5: Modelo de tamaño de la fuerza de trabajo (Programación Dinámica)
+│   ├── main.py                         # CLI (datos por defecto en datos/fuerza_trabajo.json)
+│   ├── src/                            # core (modelo por etapas) y services (reporte)
+│   ├── tests/                          # Tests unitarios con pytest
+│   └── outputs/                        # salidas_fuerza_trabajo.txt (entregable para Acrópolis)
 ├── parcial1/                           # Evaluaciones y respuestas del Parcial I
 ├── parcial2/                           # Evaluaciones, calculadora y respuestas del Parcial II (Inventarios)
 │   ├── main.py                         # Punto de entrada (GUI interactiva / CLI examen)
@@ -115,6 +120,12 @@ Implementa un simulador estocástico interactivo y visual de redes de computador
 * **Auditoría Inteligente con Google Gemini:** Integración HTTP con la API de Google Gemini (`gemini-flash-latest`) para emitir diagnósticos y recomendaciones de optimización cuantitativa en tiempo real.
 * **Entregables Oficiales:** Generación automática de reporte plano `outputs/reporte_simulacion.txt`, captura gráfica e informe formal en Word `outputs/Informe_Tecnico_Simulador_Redes.docx`.
 * **Ubicación:** `tarea3/`
+
+### Tarea 5 — Modelo de Tamaño de la Fuerza de Trabajo (Programación Dinámica)
+Contratista con demanda de 5, 7, 8, 4 y 6 trabajadores en 5 semanas: excedente \$300 por trabajador y semana, contratación \$400 fijo + \$200 por trabajador. Recursión hacia atrás por etapas en POO, con los rangos de decisión calculados desde los datos.
+* **Resultado:** fuerza 5, 8, 8, 6 y 6 trabajadores; costo total mínimo \$3300.
+* **Entregable:** `outputs/salidas_fuerza_trabajo.txt` con todas las tablas paso a paso.
+* **Ubicación:** `tarea5/`
 
 ### Parcial IV — Programación Entera (Ramificación y Acotamiento, Cubrimiento, Mochila)
 Resuelve el Parcial IV con un proyecto CLI independiente por ejercicio (`main.py`, `src/core`, `src/services`, `tests/`, `README.md` y respuesta `.md` para el examen escrito):
@@ -198,6 +209,14 @@ Desde la raíz del repositorio:
 cd tarea3
 python main.py                              # Modo grafico interactivo (Pygame a 60 FPS)
 python main.py --headless --duration 60     # Modo consola con auditoria de Gemini AI
+```
+
+### Ejecutar Tarea 5 (Fuerza de trabajo - CLI)
+
+```bash
+cd tarea5
+python3 main.py                              # Problema de la tarea (5 semanas)
+python3 main.py --demandas "4,6,5" --inicial 2   # Otros datos
 ```
 
 ### Ejecutar Parcial IV (Programación Entera - CLI)
@@ -291,6 +310,12 @@ pytest tests/ -v
 ```bash
 cd tarea3
 pytest tests/ -v
+```
+
+### Pruebas de Tarea 5
+```bash
+cd tarea5
+python3 -m pytest tests/ -q
 ```
 
 ### Pruebas de Parcial IV

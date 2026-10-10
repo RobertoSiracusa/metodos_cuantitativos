@@ -1,0 +1,9 @@
+{
+  "descripcion": "Tarea 5: contratista, 5 semanas",
+  "demandas": [5, 7, 8, 4, 6],
+  "fuerza_inicial": 0,
+  "costo_excedente": 300,
+  "costo_fijo_contratacion": 400,
+  "costo_variable_contratacion": 200,
+  "costo_despido": 0
+}
