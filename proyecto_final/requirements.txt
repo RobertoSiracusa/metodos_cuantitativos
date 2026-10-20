@@ -1,0 +1,7 @@
+simpy>=4.1
+pygame>=2.6
+matplotlib>=3.8
+fpdf2>=2.7
+requests>=2.31
+python-dotenv>=1.0
+pytest>=8.0

@@ -1,0 +1,91 @@
+{
+  "nodos": [
+    {"id": "GW", "capa": "gateway", "latencia_procesamiento": 0.5, "posicion": [80, 250]},
+    {"id": "N1", "capa": "nucleo", "latencia_procesamiento": 0.5, "posicion": [240, 125]},
+    {"id": "N2", "capa": "nucleo", "latencia_procesamiento": 0.5, "posicion": [240, 250]},
+    {"id": "N3", "capa": "nucleo", "latencia_procesamiento": 0.5, "posicion": [240, 375]},
+    {"id": "A1", "capa": "agregacion", "latencia_procesamiento": 0.5, "posicion": [400, 100]},
+    {"id": "A2", "capa": "agregacion", "latencia_procesamiento": 0.5, "posicion": [400, 200]},
+    {"id": "A3", "capa": "agregacion", "latencia_procesamiento": 0.5, "posicion": [400, 300]},
+    {"id": "A4", "capa": "agregacion", "latencia_procesamiento": 0.5, "posicion": [400, 400]},
+    {"id": "T1", "capa": "tor", "latencia_procesamiento": 0.5, "posicion": [560, 100]},
+    {"id": "T2", "capa": "tor", "latencia_procesamiento": 0.5, "posicion": [560, 200]},
+    {"id": "T3", "capa": "tor", "latencia_procesamiento": 0.5, "posicion": [560, 300]},
+    {"id": "T4", "capa": "tor", "latencia_procesamiento": 0.5, "posicion": [560, 400]}
+  ],
+  "enlaces": [
+    {"origen": "GW", "destino": "N1", "latencia": 2, "capacidad": 10},
+    {"origen": "GW", "destino": "N2", "latencia": 3, "capacidad": 10},
+    {"origen": "GW", "destino": "N3", "latencia": 4, "capacidad": 10},
+    {"origen": "N1", "destino": "A1", "latencia": 4, "capacidad": 10},
+    {"origen": "N1", "destino": "A2", "latencia": 2, "capacidad": 10},
+    {"origen": "N1", "destino": "A3", "latencia": 6, "capacidad": 10},
+    {"origen": "N2", "destino": "A1", "latencia": 5, "capacidad": 10},
+    {"origen": "N2", "destino": "A2", "latencia": 3, "capacidad": 10},
+    {"origen": "N2", "destino": "A3", "latencia": 2, "capacidad": 10},
+    {"origen": "N3", "destino": "A2", "latencia": 6, "capacidad": 10},
+    {"origen": "N3", "destino": "A3", "latencia": 3, "capacidad": 10},
+    {"origen": "N3", "destino": "A4", "latencia": 2, "capacidad": 10},
+    {"origen": "A1", "destino": "T1", "latencia": 2, "capacidad": 10},
+    {"origen": "A1", "destino": "T2", "latencia": 4, "capacidad": 10},
+    {"origen": "A2", "destino": "T1", "latencia": 3, "capacidad": 10},
+    {"origen": "A2", "destino": "T2", "latencia": 2, "capacidad": 10},
+    {"origen": "A2", "destino": "T3", "latencia": 5, "capacidad": 10},
+    {"origen": "A3", "destino": "T2", "latencia": 4, "capacidad": 10},
+    {"origen": "A3", "destino": "T3", "latencia": 2, "capacidad": 10},
+    {"origen": "A3", "destino": "T4", "latencia": 3, "capacidad": 10},
+    {"origen": "A4", "destino": "T3", "latencia": 4, "capacidad": 10},
+    {"origen": "A4", "destino": "T4", "latencia": 2, "capacidad": 10}
+  ],
+  "clusteres": [
+    {
+      "id": "C1",
+      "tor": "T1",
+      "servidores": [
+        {"id": "S1a", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 80]},
+        {"id": "S1b", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 120]}
+      ]
+    },
+    {
+      "id": "C2",
+      "tor": "T2",
+      "servidores": [
+        {"id": "S2a", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 180]},
+        {"id": "S2b", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 220]}
+      ]
+    },
+    {
+      "id": "C3",
+      "tor": "T3",
+      "servidores": [
+        {"id": "S3a", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 280]},
+        {"id": "S3b", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 320]}
+      ]
+    },
+    {
+      "id": "C4",
+      "tor": "T4",
+      "servidores": [
+        {"id": "S4a", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 380]},
+        {"id": "S4b", "capacidad": 16, "tasa_servicio": 2.0, "posicion": [720, 420]}
+      ]
+    }
+  ],
+  "paquetes_prueba": [
+    {"id": "P1", "requerimiento": 5, "prioridad": 2, "destino_cluster": "C1"},
+    {"id": "P2", "requerimiento": 4, "prioridad": 8, "destino_cluster": "C1"},
+    {"id": "P3", "requerimiento": 6, "prioridad": 6, "destino_cluster": "C1"},
+    {"id": "P4", "requerimiento": 3, "prioridad": 10, "destino_cluster": "C1"},
+    {"id": "P5", "requerimiento": 8, "prioridad": 7, "destino_cluster": "C1"},
+    {"id": "P6", "requerimiento": 2, "prioridad": 3, "destino_cluster": "C1"},
+    {"id": "P7", "requerimiento": 7, "prioridad": 9, "destino_cluster": "C1"},
+    {"id": "P8", "requerimiento": 1, "prioridad": 1, "destino_cluster": "C1"},
+    {"id": "P9", "requerimiento": 4, "prioridad": 5, "destino_cluster": "C2"},
+    {"id": "P10", "requerimiento": 6, "prioridad": 8, "destino_cluster": "C2"},
+    {"id": "P11", "requerimiento": 3, "prioridad": 4, "destino_cluster": "C3"},
+    {"id": "P12", "requerimiento": 5, "prioridad": 9, "destino_cluster": "C3"},
+    {"id": "P13", "requerimiento": 2, "prioridad": 6, "destino_cluster": "C4"},
+    {"id": "P14", "requerimiento": 7, "prioridad": 7, "destino_cluster": "C4"}
+  ],
+  "parametros": {}
+}
