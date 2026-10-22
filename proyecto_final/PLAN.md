@@ -4,7 +4,7 @@
 **Proyecto final, octubre 2026**
 **Equipo:** Roberto Siracusa (C.I. 30.195.953) · Ignacio Acena (C.I. 31.352.123)
 
-Estado: **APROBADO 2026-10-07** — se aceptaron las propuestas por defecto de la sección 7. F1 completa (39 tests en verde). Siguiente: F2.
+Estado: **COMPLETO 2026-10-22** — F1 a F6 implementadas (71 tests en verde). Ver `README.md` y `GUIA_DEFENSA.md`.
 
 Pauta oficial: `Proyecto Metodos Cuantitativos Octubre de 2026.pdf` (en esta carpeta).
 
@@ -226,14 +226,27 @@ de módulos (P8) y cada clase de `core/` se testea sola.
 
 ## 6. Fases de entrega (cada una se puede commitear)
 
-| Fase | Contenido | Verificación |
-|------|-----------|--------------|
-| F1 | Entidades + M1 (ruta, mochila) + validadores + escenario por defecto | pytest con casos a mano |
-| F2 | M2 (térmico, gradiente, Lagrange) | pytest: derivadas, convergencia, suma = E_max |
-| F3 | Motor SimPy en modo `--headless` integrando M1 y M2 | corrida reproducible con semilla |
-| F4 | Dashboard Pygame | corrida manual + captura |
-| F5 | Gemini + reporte PDF | PDF generado con y sin clave |
-| F6 | README, actualizar el README raíz, guía de defensa | revisión |
+| Fase | Contenido | Verificación | Estado |
+|------|-----------|--------------|--------|
+| F1 | Entidades + M1 (ruta, mochila) + validadores + escenario por defecto | pytest con casos a mano | ✅ 39 tests |
+| F2 | M2 (térmico, gradiente, Lagrange) | pytest: derivadas, convergencia, suma = E_max | ✅ `tests/test_no_lineal.py` |
+| F3 | Motor SimPy en modo `--headless` integrando M1 y M2 | corrida reproducible con semilla | ✅ `tests/test_simulacion.py` |
+| F4 | Dashboard Pygame | corrida manual + captura | ✅ `docs/dashboard.png`, `tests/test_gui.py` |
+| F5 | Gemini + reporte PDF | PDF generado con y sin clave | ✅ `tests/test_reporte.py` + corrida real con `gemini-3.5-flash` |
+| F6 | README, actualizar el README raíz, guía de defensa | revisión | ✅ |
+
+### Notas de implementación (desvíos menores respecto al diseño)
+
+- La sección `parametros` del escenario agrupa `termico`, `gradiente`, `lagrange` y `simulacion`;
+  `Configuracion` construye los modelos de M2 con esos valores y el validador rechaza secciones o
+  claves desconocidas.
+- `Optimizador.actualizar()` recibe una `EntradaOptimizacion` (definida en `core/`) en vez del
+  `EstadoSimulacion`, para que `core/` no dependa de `simulation/`.
+- `MetricasColas` expone métodos por tipo de evento (`llegada`, `inicio_servicio`, `fin_servicio`,
+  `perdido`, `muestrear`) en lugar de un único `registrar(evento)`.
+- Parámetros de la simulación ajustados por corrida: `tasa_llegada = 4`, `escala_latencia = 0.2`
+  (con 1.0 la congestión de los enlaces se retroalimentaba y los paquetes quedaban atascados),
+  `mtbf = 200`.
 
 ---
 

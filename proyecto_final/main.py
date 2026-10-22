@@ -11,13 +11,16 @@ from __future__ import annotations
 import argparse
 import math
 import sys
+from typing import TYPE_CHECKING
 
 from src.core.no_lineal.base import EntradaOptimizacion
 from src.core.programacion_dinamica.mochila import Mochila
 from src.core.programacion_dinamica.ruta_mas_corta import RutaMasCorta
-from src.simulation.motor_simpy import MotorSimulacion
 from src.utils.config import Configuracion
 from src.utils.validators import ErrorValidacion, Validador
+
+if TYPE_CHECKING:
+    from src.simulation.motor_simpy import MotorSimulacion
 
 
 def _construir_parser() -> argparse.ArgumentParser:
@@ -59,7 +62,9 @@ def _cargar_configuracion(args: argparse.Namespace) -> Configuracion:
     return Configuracion.desde_archivo(args.escenario) if args.escenario else Configuracion.por_defecto()
 
 
-def _crear_motor(args: argparse.Namespace) -> MotorSimulacion:
+def _crear_motor(args: argparse.Namespace) -> "MotorSimulacion":
+    from src.simulation.motor_simpy import MotorSimulacion  # import diferido: m1 y m2 no necesitan SimPy
+
     configuracion = _cargar_configuracion(args)
     if args.duracion is not None:
         datos = configuracion.datos
@@ -70,7 +75,7 @@ def _crear_motor(args: argparse.Namespace) -> MotorSimulacion:
     return MotorSimulacion(configuracion, semilla=args.semilla)
 
 
-def _generador_reporte(motor: MotorSimulacion, sin_ia: bool):
+def _generador_reporte(motor: "MotorSimulacion", sin_ia: bool):
     """Devuelve una funcion estado -> ruta del PDF (la usan --reporte y la tecla P de la GUI)."""
     from src.services.ia import ProveedorSinConexion, crear_proveedor
     from src.services.reporte_pdf import GeneradorReportePDF

@@ -59,6 +59,13 @@ metodos_cuantitativos/
 │   ├── ejercicio1.md                   # Verdadero/Falso justificado
 │   ├── ejercicio2/                     # Ruta más corta: etapas, Floyd-Warshall y Bellman-Ford
 │   └── ejercicio3/                     # Volumen de carga (VolumenCarga por etapas)
+├── proyecto_final/                     # Proyecto final: Simulador de optimizacion para redes de centros de datos
+│   ├── main.py                         # Dashboard Pygame / --headless / --modulo m1|m2
+│   ├── src/                            # core (DP y no lineal), simulation (SimPy), gui, services (Gemini + PDF), utils
+│   ├── data/escenario_default.json     # Datos por defecto (topologia, paquetes y parametros)
+│   ├── tests/                          # Tests unitarios con pytest (71 tests)
+│   ├── PLAN.md / GUIA_DEFENSA.md       # Plan de desarrollo y guia para la defensa
+│   └── README.md                       # Documentacion del proyecto
 ├── claseSimulacion/                    # Simulacion de Eventos Discretos: Juego Snake (SimPy + Pygame en POO)
 │   ├── main.py                         # Punto de entrada (Modo manual, Auto IA, Headless)
 │   ├── src/                            # Arquitectura POO: models, simulation, view, engine
@@ -141,6 +148,13 @@ Resuelve el Parcial V con la misma estructura del Parcial IV: un proyecto CLI po
 * **Ejercicio 2 — Ruta más corta (13 nodos):** recursión por etapas hacia adelante y hacia atrás, Floyd-Warshall y Bellman-Ford propios, verificados con `scipy.sparse.csgraph`. Ruta óptima: 1-3-5-7-10-13, total 430.
 * **Ejercicio 3 — Volumen de carga (10 kg):** clase `VolumenCarga` con tablas por etapa, verificada con `milp`. Óptimo: Tablet, Dron y Proyector, 9 kg, \$155.
 * **Ubicación:** `parcial5/`
+
+### Proyecto Final — Simulador de Optimización para Redes de Centros de Datos
+Integra programación dinámica, optimización no lineal y simulación en un solo simulador POO:
+* **Módulo 1 (DP):** ruta más corta por etapas con costos de congestión y mochila 0/1 para despachar tareas en cada servidor.
+* **Módulo 2 (no lineal):** modelo térmico cúbico con puntos estacionarios, inflexión y punto crítico; método del gradiente para la velocidad de los ventiladores; multiplicadores de Lagrange (con KKT) para repartir la energía entre clústeres.
+* **Módulo 3 (simulación):** SimPy con llegadas Poisson, servicio exponencial y fallas de nodos; dashboard Pygame con rutas que parpadean al cambiar y gráficos en vivo; reporte PDF con análisis de Google Gemini.
+* **Ubicación:** `proyecto_final/`
 
 ### Clase Simulación — Sistema Discreto: Juego Snake (SimPy + Pygame)
 Implementa un modelo de simulación por eventos discretos bajo el paradigma de Programación Orientada a Objetos (POO):
@@ -238,6 +252,16 @@ python parcial5/ejercicio3/main.py                               # Volumen de ca
 python parcial5/ejercicio3/main.py --capacidad 14                # Otra capacidad
 ```
 
+### Ejecutar Proyecto Final (Redes de centros de datos)
+
+```bash
+cd proyecto_final
+python main.py                          # Dashboard Pygame
+python main.py --headless --reporte     # Simulación sin ventana + reporte PDF
+python main.py --modulo m1              # Sólo programación dinámica
+python main.py --modulo m2              # Sólo optimización no lineal
+```
+
 ### Ejecutar Clase Simulación (Snake SimPy + Pygame)
 
 Desde la raíz del repositorio:
@@ -329,6 +353,12 @@ pytest parcial4/ejercicio4/tests/ -v
 ```bash
 pytest parcial5/ejercicio2/tests/ -v
 pytest parcial5/ejercicio3/tests/ -v
+```
+
+### Pruebas del Proyecto Final
+```bash
+cd proyecto_final
+python -m pytest -q
 ```
 
 ### Pruebas de Clase Simulación
