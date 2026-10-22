@@ -93,12 +93,12 @@
     "lagrange": {"e_max": 100},
     "simulacion": {
       "duracion": 300,
-      "tasa_llegada": 1.2,
+      "tasa_llegada": 4.0,
       "ventana_despacho": 1.0,
       "paso_control": 1.0,
       "mtbf": 120,
       "mttr": 15,
-      "escala_latencia": 0.1
+      "escala_latencia": 0.2
     }
   }
 }

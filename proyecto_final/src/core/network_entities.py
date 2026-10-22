@@ -116,6 +116,10 @@ class Servidor(Nodo):
         return self._capacidad
 
     @property
+    def tasa_servicio(self) -> float:
+        return self._tasa_servicio
+
+    @property
     def cola(self) -> tuple[Paquete, ...]:
         return tuple(self._cola)
 

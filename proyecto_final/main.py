@@ -1,7 +1,9 @@
 """Punto de entrada del simulador.
 
-Fase F1: solo esta disponible --modulo m1 (ruta mas corta + mochila sobre datos
-estaticos). Los demas modos (--modulo m2, GUI, SimPy) se agregan en fases posteriores.
+    python main.py                  dashboard Pygame (simulacion en vivo)
+    python main.py --headless       simulacion SimPy sin ventana, imprime el resumen
+    python main.py --modulo m1      modulo 1 solo: ruta mas corta + mochila
+    python main.py --modulo m2      modulo 2 solo: termico, gradiente y Lagrange
 """
 
 from __future__ import annotations
@@ -10,10 +12,11 @@ import argparse
 import math
 import sys
 
+from src.core.no_lineal.base import EntradaOptimizacion
 from src.core.programacion_dinamica.mochila import Mochila
 from src.core.programacion_dinamica.ruta_mas_corta import RutaMasCorta
+from src.simulation.motor_simpy import MotorSimulacion
 from src.utils.config import Configuracion
-from src.core.no_lineal.base import EntradaOptimizacion
 from src.utils.validators import ErrorValidacion, Validador
 
 
@@ -29,6 +32,9 @@ def _construir_parser() -> argparse.ArgumentParser:
         metavar="NODO",
         help="Id de un nodo a marcar como caido antes de resolver (repetible)",
     )
+    parser.add_argument("--headless", action="store_true", help="Corre la simulacion SimPy sin ventana")
+    parser.add_argument("--semilla", type=int, default=42, help="Semilla aleatoria de la simulacion (default: 42)")
+    parser.add_argument("--duracion", type=float, default=None, help="Duracion de la simulacion (default: la del escenario)")
     parser.add_argument("--carga", type=float, default=60.0, help="Carga Q en %% para el gradiente del modulo m2 (default: 60)")
     parser.add_argument("--iteraciones", type=_entero_positivo, default=50, help="Iteraciones del gradiente en m2 (default: 50)")
     return parser
@@ -45,8 +51,40 @@ def _formatear_costo(costo: float) -> str:
     return "inf" if math.isinf(costo) else f"{costo:.4f}"
 
 
+def _cargar_configuracion(args: argparse.Namespace) -> Configuracion:
+    return Configuracion.desde_archivo(args.escenario) if args.escenario else Configuracion.por_defecto()
+
+
+def _crear_motor(args: argparse.Namespace) -> MotorSimulacion:
+    configuracion = _cargar_configuracion(args)
+    if args.duracion is not None:
+        datos = configuracion.datos
+        datos["parametros"].setdefault("simulacion", {})["duracion"] = Validador.validar_rango(
+            "--duracion", args.duracion, minimo=1, maximo=100000
+        )
+        configuracion = Configuracion(datos)
+    return MotorSimulacion(configuracion, semilla=args.semilla)
+
+
+def _ejecutar_headless(args: argparse.Namespace) -> None:
+    motor = _crear_motor(args)
+    motor.suscribir(lambda e: print(f"[t={e.tiempo:7.2f}] {e.tipo:<11} {e.mensaje}") if e.tipo != "cambio_ruta" else None)
+    motor.avanzar(motor.duracion)
+    estado = motor.estado()
+
+    print()
+    print(f"Resumen de la simulacion (duracion {motor.duracion}, semilla {args.semilla}):")
+    for clave, valor in estado.metricas.items():
+        print(f"  {clave:<22}{valor:.4f}" if isinstance(valor, float) else f"  {clave:<22}{valor}")
+    print("Eventos:", estado.conteo_eventos)
+    print("M/M/1 de referencia por servidor:", {k: round(v, 4) for k, v in motor.comparacion_mm1().items()})
+    print(f"Temperatura final {estado.temperatura:.2f} C con carga {estado.carga:.2f} %  |  ventilador v = {estado.velocidad:.4f}")
+    print("Energia por cluster:", {k: round(v, 2) for k, v in estado.energia_clusteres.items()}, f"lambda = {estado.lambda_:.4f}")
+    print("Rutas finales:", {k: " -> ".join(v) or "sin ruta" for k, v in estado.rutas.items()})
+
+
 def _ejecutar_modulo_m1(args: argparse.Namespace) -> None:
-    configuracion = Configuracion.desde_archivo(args.escenario) if args.escenario else Configuracion.por_defecto()
+    configuracion = _cargar_configuracion(args)
     red = configuracion.construir_red()
 
     for nodo_id in args.fallar:
@@ -92,7 +130,7 @@ def _ejecutar_modulo_m1(args: argparse.Namespace) -> None:
 
 def _ejecutar_modulo_m2(args: argparse.Namespace) -> None:
     q = Validador.validar_rango("--carga", args.carga, minimo=0, maximo=100)
-    configuracion = Configuracion.desde_archivo(args.escenario) if args.escenario else Configuracion.por_defecto()
+    configuracion = _cargar_configuracion(args)
 
     termico = configuracion.construir_modelo_termico()
     print("Modelo termico T(c) (R3):")
@@ -128,6 +166,10 @@ def _ejecutar_modulo_m2(args: argparse.Namespace) -> None:
     print(f"  suma E = {sum(resultado.asignacion.values()):.4f}")
 
 
+def _ejecutar_gui(args: argparse.Namespace) -> None:
+    print("El dashboard Pygame llega en la fase F4; usa --headless por ahora.")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = _construir_parser()
     args = parser.parse_args(argv)
@@ -135,8 +177,12 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.modulo == "m1":
             _ejecutar_modulo_m1(args)
-        else:
+        elif args.modulo == "m2":
             _ejecutar_modulo_m2(args)
+        elif args.headless:
+            _ejecutar_headless(args)
+        else:
+            _ejecutar_gui(args)
     except ErrorValidacion as e:
         print(f"Error: {e}", file=sys.stderr)
         return 2
