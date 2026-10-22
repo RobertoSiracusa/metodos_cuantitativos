@@ -67,6 +67,7 @@ class EstadoSimulacion:
     velocidad: float
     lambda_: float
     energia_clusteres: dict[str, float]
+    ultimas_mochilas: dict[str, dict]  # servidor -> ultima decision de la mochila (R2)
     eventos: tuple[Evento, ...]  # los ultimos 200
     conteo_eventos: dict[str, int]  # total por tipo desde el inicio
     metricas: dict[str, float]
@@ -121,6 +122,7 @@ class MotorSimulacion:
         self._emergencia = False
         self._serie_termico: dict[str, list[float]] = {"tiempo": [], "carga": [], "temperatura": []}
         self._contador = 0
+        self._ultimas_mochilas: dict[str, dict] = {}
 
         for cluster in self._red.clusteres:
             self._rutas[cluster.id] = self._calcular_ruta(cluster.id)
@@ -196,6 +198,7 @@ class MotorSimulacion:
             velocidad=self._gradiente.velocidad_actual,
             lambda_=self._lagrange.lambda_actual,
             energia_clusteres={c.id: c.energia_asignada for c in self._red.clusteres},
+            ultimas_mochilas={k: dict(v) for k, v in self._ultimas_mochilas.items()},
             eventos=tuple(self._eventos),
             conteo_eventos=dict(self._conteo_eventos),
             metricas=self._metricas.resumen(),
@@ -254,7 +257,17 @@ class MotorSimulacion:
             yield self._env.timeout(self._p["ventana_despacho"])
             if not servidor.esta_operativo or not servidor.cola or servidor.capacidad_libre == 0:
                 continue
-            resultado = Mochila(servidor.capacidad_libre).resolver(servidor.cola)
+            capacidad_libre = servidor.capacidad_libre
+            en_cola = len(servidor.cola)
+            resultado = Mochila(capacidad_libre).resolver(servidor.cola)
+            self._ultimas_mochilas[servidor.id] = {
+                "tiempo": self._env.now,
+                "capacidad_libre": capacidad_libre,
+                "en_cola": en_cola,
+                "seleccionados": [p.id for p in resultado.seleccionados],
+                "valor": resultado.valor_total,
+                "peso": resultado.peso_total,
+            }
             if not resultado.seleccionados:
                 continue
             servidor.asignar(list(resultado.seleccionados))

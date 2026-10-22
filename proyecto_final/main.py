@@ -35,6 +35,8 @@ def _construir_parser() -> argparse.ArgumentParser:
     parser.add_argument("--headless", action="store_true", help="Corre la simulacion SimPy sin ventana")
     parser.add_argument("--semilla", type=int, default=42, help="Semilla aleatoria de la simulacion (default: 42)")
     parser.add_argument("--duracion", type=float, default=None, help="Duracion de la simulacion (default: la del escenario)")
+    parser.add_argument("--reporte", action="store_true", help="Con --headless: genera el reporte PDF al terminar")
+    parser.add_argument("--sin-ia", action="store_true", help="No llama a la API de IA en el reporte")
     parser.add_argument("--captura", default=None, metavar="PNG", help="Guarda una imagen del dashboard sin abrir la ventana")
     parser.add_argument("--tiempo-captura", type=float, default=120.0, help="Instante de la captura (default: 120)")
     parser.add_argument("--carga", type=float, default=60.0, help="Carga Q en %% para el gradiente del modulo m2 (default: 60)")
@@ -68,6 +70,17 @@ def _crear_motor(args: argparse.Namespace) -> MotorSimulacion:
     return MotorSimulacion(configuracion, semilla=args.semilla)
 
 
+def _generador_reporte(motor: MotorSimulacion, sin_ia: bool):
+    """Devuelve una funcion estado -> ruta del PDF (la usan --reporte y la tecla P de la GUI)."""
+    from src.services.ia import ProveedorSinConexion, crear_proveedor
+    from src.services.reporte_pdf import GeneradorReportePDF
+
+    proveedor = ProveedorSinConexion("se pidio --sin-ia") if sin_ia else crear_proveedor()
+    generador = GeneradorReportePDF(proveedor)
+    contexto = lambda: {"parametros": motor.parametros, "mm1": motor.comparacion_mm1()}  # noqa: E731
+    return lambda estado: generador.generar(estado, contexto=contexto())
+
+
 def _ejecutar_headless(args: argparse.Namespace) -> None:
     motor = _crear_motor(args)
     motor.suscribir(lambda e: print(f"[t={e.tiempo:7.2f}] {e.tipo:<11} {e.mensaje}") if e.tipo != "cambio_ruta" else None)
@@ -83,6 +96,8 @@ def _ejecutar_headless(args: argparse.Namespace) -> None:
     print(f"Temperatura final {estado.temperatura:.2f} C con carga {estado.carga:.2f} %  |  ventilador v = {estado.velocidad:.4f}")
     print("Energia por cluster:", {k: round(v, 2) for k, v in estado.energia_clusteres.items()}, f"lambda = {estado.lambda_:.4f}")
     print("Rutas finales:", {k: " -> ".join(v) or "sin ruta" for k, v in estado.rutas.items()})
+    if args.reporte:
+        print(f"Reporte PDF guardado en {_generador_reporte(motor, args.sin_ia)(estado)}")
 
 
 def _ejecutar_modulo_m1(args: argparse.Namespace) -> None:
@@ -171,7 +186,8 @@ def _ejecutar_modulo_m2(args: argparse.Namespace) -> None:
 def _ejecutar_gui(args: argparse.Namespace) -> None:
     from src.gui.app import AplicacionPygame  # import diferido: m1, m2 y --headless no necesitan pygame
 
-    aplicacion = AplicacionPygame(_crear_motor(args))
+    motor = _crear_motor(args)
+    aplicacion = AplicacionPygame(motor, _generador_reporte(motor, args.sin_ia))
     if args.captura:
         ruta = aplicacion.capturar(args.captura, Validador.validar_rango("--tiempo-captura", args.tiempo_captura, minimo=0))
         print(f"Captura guardada en {ruta}")
