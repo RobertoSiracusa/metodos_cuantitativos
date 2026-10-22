@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 
 from src.core.network_entities import Enlace, Paquete, Router, Servidor
+from src.core.no_lineal.gradiente_enfriamiento import GradienteEnfriamiento
+from src.core.no_lineal.lagrange_energia import AsignadorLagrange
+from src.core.no_lineal.modelo_termico import ModeloTermico
 from src.core.red import Cluster, Red
 from src.utils.validators import ErrorValidacion, Validador
 
@@ -87,6 +90,26 @@ class Configuracion:
             clusteres.append(Cluster(id=cluster["id"], tor_id=cluster["tor"], servidores=servidores))
 
         return Red(routers=routers, enlaces=enlaces, clusteres=clusteres)
+
+    def parametros(self, seccion: str) -> dict:
+        """Copia de una seccion de `parametros` del escenario ({} si no esta definida)."""
+        return dict(self._datos["parametros"].get(seccion, {}))
+
+    def construir_modelo_termico(self) -> ModeloTermico:
+        return self._construir(ModeloTermico, "termico")
+
+    def construir_gradiente(self) -> GradienteEnfriamiento:
+        return self._construir(GradienteEnfriamiento, "gradiente")
+
+    def construir_lagrange(self) -> AsignadorLagrange:
+        return self._construir(AsignadorLagrange, "lagrange")
+
+    def _construir(self, clase: type, seccion: str):
+        """Crea `clase` con los parametros de la seccion; una clave desconocida es un error de validacion."""
+        try:
+            return clase(**self.parametros(seccion))
+        except TypeError as e:
+            raise ErrorValidacion(f"parametros.{seccion} tiene una clave invalida: {e}") from None
 
     def construir_paquetes(self) -> list[Paquete]:
         """Construye la lista de paquetes de prueba (objetos nuevos) desde el escenario."""

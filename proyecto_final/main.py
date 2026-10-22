@@ -13,7 +13,8 @@ import sys
 from src.core.programacion_dinamica.mochila import Mochila
 from src.core.programacion_dinamica.ruta_mas_corta import RutaMasCorta
 from src.utils.config import Configuracion
-from src.utils.validators import ErrorValidacion
+from src.core.no_lineal.base import EntradaOptimizacion
+from src.utils.validators import ErrorValidacion, Validador
 
 
 def _construir_parser() -> argparse.ArgumentParser:
@@ -28,7 +29,16 @@ def _construir_parser() -> argparse.ArgumentParser:
         metavar="NODO",
         help="Id de un nodo a marcar como caido antes de resolver (repetible)",
     )
+    parser.add_argument("--carga", type=float, default=60.0, help="Carga Q en %% para el gradiente del modulo m2 (default: 60)")
+    parser.add_argument("--iteraciones", type=_entero_positivo, default=50, help="Iteraciones del gradiente en m2 (default: 50)")
     return parser
+
+
+def _entero_positivo(texto: str) -> int:
+    try:
+        return int(Validador.validar_rango("--iteraciones", texto, minimo=1, maximo=100000, entero=True))
+    except ErrorValidacion as e:
+        raise argparse.ArgumentTypeError(str(e)) from None
 
 
 def _formatear_costo(costo: float) -> str:
@@ -80,8 +90,42 @@ def _ejecutar_modulo_m1(args: argparse.Namespace) -> None:
     print(f"Peso total: {resultado_mochila.peso_total}")
 
 
-def _ejecutar_modulo_m2() -> None:
-    print("El modulo m2 (optimizacion no lineal: termico, gradiente, Lagrange) llega en fases posteriores (F2/F4).")
+def _ejecutar_modulo_m2(args: argparse.Namespace) -> None:
+    q = Validador.validar_rango("--carga", args.carga, minimo=0, maximo=100)
+    configuracion = Configuracion.desde_archivo(args.escenario) if args.escenario else Configuracion.por_defecto()
+
+    termico = configuracion.construir_modelo_termico()
+    print("Modelo termico T(c) (R3):")
+    for punto in termico.puntos_estacionarios():
+        print(f"  {punto.tipo:<7} local en c = {punto.carga:.2f} %  ->  T = {punto.temperatura:.2f} C")
+    inflexion = termico.punto_inflexion()
+    print(f"  inflexion en c = {inflexion:.2f} %" if inflexion is not None else "  sin inflexion en el dominio")
+    umbral = termico.carga_umbral()
+    print(f"  T >= {termico.t_max} C desde c = {umbral:.2f} %" if umbral is not None else f"  T nunca llega a {termico.t_max} C")
+    critico = termico.punto_critico()
+    print(f"  punto critico de enfriamiento de emergencia: c = {critico:.2f} %" if critico is not None else "  sin punto critico")
+    print()
+
+    gradiente = configuracion.construir_gradiente()
+    print(f"Gradiente de enfriamiento con carga Q = {q} % (R4):")
+    print(f"{'iter':<6}{'v':<10}{'E(v)':<12}{'E_prima(v)':<12}")
+    for i in range(1, args.iteraciones + 1):
+        valores = gradiente.actualizar(EntradaOptimizacion(float(i), carga=q)).valores
+        if i <= 5 or i % 10 == 0 or i == args.iteraciones:
+            print(f"{i:<6}{valores['velocidad']:<10.4f}{valores['energia']:<12.4f}{valores['gradiente']:<12.4f}")
+    print(f"  optimo analitico v* = {gradiente.optimo_analitico(q):.4f}")
+    print()
+
+    demandas: dict[str, float] = {c["id"]: 0.0 for c in configuracion.datos["clusteres"]}
+    for paquete in configuracion.construir_paquetes():
+        demandas[paquete.destino_cluster] += paquete.requerimiento
+    lagrange = configuracion.construir_lagrange()
+    resultado = lagrange.resolver(demandas, lagrange.e_max)
+    print(f"Reparto de energia con Lagrange, E_max = {lagrange.e_max} (R5):")
+    for cid, energia in resultado.asignacion.items():
+        print(f"  {cid}: demanda {demandas[cid]:>6.1f}  ->  E = {energia:.4f}")
+    print(f"  lambda = {resultado.lambda_:.4f}   rendimiento R = {resultado.rendimiento:.4f}")
+    print(f"  suma E = {sum(resultado.asignacion.values()):.4f}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -92,7 +136,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.modulo == "m1":
             _ejecutar_modulo_m1(args)
         else:
-            _ejecutar_modulo_m2()
+            _ejecutar_modulo_m2(args)
     except ErrorValidacion as e:
         print(f"Error: {e}", file=sys.stderr)
         return 2

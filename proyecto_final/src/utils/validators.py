@@ -10,6 +10,7 @@ import math
 from typing import Any
 
 CAPAS_VALIDAS = ("gateway", "nucleo", "agregacion", "tor")
+SECCIONES_PARAMETROS = ("termico", "gradiente", "lagrange", "simulacion")
 
 
 class ErrorValidacion(ValueError):
@@ -73,8 +74,7 @@ class Validador:
             # sin las claves base no hay nada mas que se pueda inspeccionar de forma segura
             raise ErrorValidacion("\n".join(errores))
 
-        if not isinstance(datos["parametros"], dict):
-            errores.append(f"parametros debe ser un objeto (recibido: {type(datos['parametros']).__name__})")
+        Validador._validar_parametros(datos["parametros"], errores)
 
         ids_nodos = Validador._validar_nodos(datos["nodos"], errores)
         Validador._validar_enlaces(datos["enlaces"], ids_nodos, errores)
@@ -257,6 +257,26 @@ class Validador:
             destino_cluster = paquete.get("destino_cluster")
             if destino_cluster not in ids_clusteres:
                 errores.append(f"{prefijo} ({pid}).destino_cluster '{destino_cluster}' no existe entre los clusteres")
+
+    @staticmethod
+    def _validar_parametros(parametros: Any, errores: list[str]) -> None:
+        """Cada seccion conocida debe ser un objeto de numeros finitos; los rangos finos los
+        valida el constructor de cada modelo al recibirlos."""
+        if not isinstance(parametros, dict):
+            errores.append(f"parametros debe ser un objeto (recibido: {type(parametros).__name__})")
+            return
+        for seccion, valores in parametros.items():
+            if seccion not in SECCIONES_PARAMETROS:
+                errores.append(f"parametros.{seccion} no es una seccion valida, debe ser una de {SECCIONES_PARAMETROS}")
+                continue
+            if not isinstance(valores, dict):
+                errores.append(f"parametros.{seccion} debe ser un objeto (recibido: {type(valores).__name__})")
+                continue
+            for clave, valor in valores.items():
+                try:
+                    Validador.validar_rango(f"parametros.{seccion}.{clave}", valor)
+                except ErrorValidacion as e:
+                    errores.append(str(e))
 
     @staticmethod
     def _id_o_none(nombre: str, valor: Any, errores: list[str]) -> str | None:

@@ -87,5 +87,18 @@
     {"id": "P13", "requerimiento": 2, "prioridad": 6, "destino_cluster": "C4"},
     {"id": "P14", "requerimiento": 7, "prioridad": 7, "destino_cluster": "C4"}
   ],
-  "parametros": {}
+  "parametros": {
+    "termico": {"a": 0.0002, "b": -0.03, "k": 1.26, "d": 30, "t_max": 50},
+    "gradiente": {"a": 1.0, "b": 0.05, "alfa": 0.05, "v_inicial": 0.3, "v_min": 0.1, "v_max": 2.0},
+    "lagrange": {"e_max": 100},
+    "simulacion": {
+      "duracion": 300,
+      "tasa_llegada": 1.2,
+      "ventana_despacho": 1.0,
+      "paso_control": 1.0,
+      "mtbf": 120,
+      "mttr": 15,
+      "escala_latencia": 0.1
+    }
+  }
 }
