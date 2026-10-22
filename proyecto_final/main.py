@@ -35,6 +35,8 @@ def _construir_parser() -> argparse.ArgumentParser:
     parser.add_argument("--headless", action="store_true", help="Corre la simulacion SimPy sin ventana")
     parser.add_argument("--semilla", type=int, default=42, help="Semilla aleatoria de la simulacion (default: 42)")
     parser.add_argument("--duracion", type=float, default=None, help="Duracion de la simulacion (default: la del escenario)")
+    parser.add_argument("--captura", default=None, metavar="PNG", help="Guarda una imagen del dashboard sin abrir la ventana")
+    parser.add_argument("--tiempo-captura", type=float, default=120.0, help="Instante de la captura (default: 120)")
     parser.add_argument("--carga", type=float, default=60.0, help="Carga Q en %% para el gradiente del modulo m2 (default: 60)")
     parser.add_argument("--iteraciones", type=_entero_positivo, default=50, help="Iteraciones del gradiente en m2 (default: 50)")
     return parser
@@ -167,7 +169,14 @@ def _ejecutar_modulo_m2(args: argparse.Namespace) -> None:
 
 
 def _ejecutar_gui(args: argparse.Namespace) -> None:
-    print("El dashboard Pygame llega en la fase F4; usa --headless por ahora.")
+    from src.gui.app import AplicacionPygame  # import diferido: m1, m2 y --headless no necesitan pygame
+
+    aplicacion = AplicacionPygame(_crear_motor(args))
+    if args.captura:
+        ruta = aplicacion.capturar(args.captura, Validador.validar_rango("--tiempo-captura", args.tiempo_captura, minimo=0))
+        print(f"Captura guardada en {ruta}")
+    else:
+        aplicacion.ejecutar()
 
 
 def main(argv: list[str] | None = None) -> int:

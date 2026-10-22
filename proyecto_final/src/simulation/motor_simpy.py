@@ -22,7 +22,7 @@ PARAMETROS_SIMULACION = {
     "tasa_llegada": 4.0,  # paquetes por unidad de tiempo (Poisson)
     "ventana_despacho": 1.0,  # cada cuanto cada servidor corre la mochila sobre su cola
     "paso_control": 1.0,  # cada cuanto corren el gradiente y Lagrange
-    "mtbf": 120.0,  # tiempo medio entre fallas de un nodo
+    "mtbf": 200.0,  # tiempo medio entre fallas de un nodo
     "mttr": 15.0,  # tiempo medio de reparacion
     "escala_latencia": 0.2,  # convierte el costo de un enlace en tiempo de transito
     "requerimiento_max": 8,  # requerimiento de cada paquete ~ U{1..requerimiento_max}
@@ -60,6 +60,9 @@ class EstadoSimulacion:
     carga: float
     temperatura: float
     punto_critico: float | None
+    curva_termica: tuple[tuple[float, float], ...]  # (carga, T(carga)) de 0 a 100 %
+    puntos_estacionarios: tuple[tuple[float, float, str], ...]  # (carga, T, tipo)
+    punto_inflexion: float | None
     emergencia: bool
     velocidad: float
     lambda_: float
@@ -103,6 +106,8 @@ class MotorSimulacion:
         self._lagrange = configuracion.construir_lagrange()
         self._optimizadores: list[Optimizador] = [self._gradiente, self._lagrange]
         self._punto_critico = self._termico.punto_critico()
+        self._curva_termica = tuple((float(c), self._termico.temperatura(c)) for c in range(0, 101))
+        self._puntos_estacionarios = tuple((p.carga, p.temperatura, p.tipo) for p in self._termico.puntos_estacionarios())
         self._metricas = MetricasColas()
 
         self._gateway = next(r.id for r in self._red.routers if r.capa == "gateway")
@@ -184,6 +189,9 @@ class MotorSimulacion:
             carga=self._carga,
             temperatura=self._termico.temperatura(self._carga),
             punto_critico=self._punto_critico,
+            curva_termica=self._curva_termica,
+            puntos_estacionarios=self._puntos_estacionarios,
+            punto_inflexion=self._termico.punto_inflexion(),
             emergencia=self._emergencia,
             velocidad=self._gradiente.velocidad_actual,
             lambda_=self._lagrange.lambda_actual,

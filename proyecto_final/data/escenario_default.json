@@ -96,7 +96,7 @@
       "tasa_llegada": 4.0,
       "ventana_despacho": 1.0,
       "paso_control": 1.0,
-      "mtbf": 120,
+      "mtbf": 200,
       "mttr": 15,
       "escala_latencia": 0.2
     }
