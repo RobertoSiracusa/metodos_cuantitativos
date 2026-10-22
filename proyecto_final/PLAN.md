@@ -232,7 +232,7 @@ de módulos (P8) y cada clase de `core/` se testea sola.
 | F2 | M2 (térmico, gradiente, Lagrange) | pytest: derivadas, convergencia, suma = E_max | ✅ `tests/test_no_lineal.py` |
 | F3 | Motor SimPy en modo `--headless` integrando M1 y M2 | corrida reproducible con semilla | ✅ `tests/test_simulacion.py` |
 | F4 | Dashboard Pygame | corrida manual + captura | ✅ `docs/dashboard.png`, `tests/test_gui.py` |
-| F5 | Gemini + reporte PDF | PDF generado con y sin clave | ✅ `tests/test_reporte.py` + corrida real con `gemini-3.5-flash` |
+| F5 | Gemini + reporte PDF | PDF generado con y sin clave | ✅ `tests/test_reporte.py` + corrida real con `gemini-3.8-flash` |
 | F6 | README, actualizar el README raíz, guía de defensa | revisión | ✅ |
 
 ### Notas de implementación (desvíos menores respecto al diseño)

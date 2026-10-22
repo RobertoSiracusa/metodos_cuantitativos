@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 _RAIZ_PROYECTO = Path(__file__).resolve().parent.parent.parent
 
-MODELOS_GEMINI = ("gemini-3.5-flash", "gemini-flash-latest", "gemini-3.5-flash-lite")
+MODELOS_GEMINI = ("gemini-3.8-flash", "gemini-3.5-flash", "gemini-flash-latest")
 
 PROMPT_BASE = (
     "Eres un analista de investigacion de operaciones. Analiza los resultados de un simulador de "
