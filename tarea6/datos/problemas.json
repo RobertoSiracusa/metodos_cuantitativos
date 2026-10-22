@@ -1,0 +1,35 @@
+{
+  "problema1": {
+    "descripcion": "Problema sin restricciones (derivadas parciales) - Minimizacion de Costo",
+    "coef_x2": 1.0,
+    "coef_y2": 1.0,
+    "coef_x": -4.0,
+    "coef_y": -6.0,
+    "constante": 20.0
+  },
+  "problema2": {
+    "descripcion": "Metodo de Lagrange (restriccion de igualdad) - Maximizacion de Area con Perimetro Fijo",
+    "perimetro": 40.0
+  },
+  "problema3": {
+    "descripcion": "Metodo del Gradiente (busqueda iterativa) - Maximizacion Cuadratica",
+    "x0": 0.0,
+    "y0": 0.0,
+    "tasa_aprendizaje": 0.1,
+    "max_iter": 50,
+    "tolerancia": 1e-6
+  },
+  "problema4": {
+    "descripcion": "Problema con multiples restricciones (KKT) - Maximizacion de Ganancia",
+    "coef_x": 5.0,
+    "coef_y": 8.0,
+    "coef_x2": -0.1,
+    "coef_y2": -0.2,
+    "capacidad_maxima": 40.0
+  },
+  "problema5": {
+    "descripcion": "Problema de volumen minimo / dimensionamiento de cilindro - Minimizacion de Area Superficial",
+    "volumen": 500.0,
+    "cerrado": true
+  }
+}

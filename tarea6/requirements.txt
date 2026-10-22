@@ -1,0 +1,5 @@
+# Tarea 6 - Programacion No Lineal (Metodos Cuantitativos)
+# Instalacion: pip install -r requirements.txt
+numpy>=1.24.0
+scipy>=1.10.0
+pytest>=8.0.0

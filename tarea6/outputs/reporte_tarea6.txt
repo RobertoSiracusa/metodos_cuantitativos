@@ -1,0 +1,181 @@
+================================================================================
+UNIVERSIDAD JOSE ANTONIO PAEZ - FACULTAD DE INGENIERIA
+ESCUELA DE INGENIERIA EN COMPUTACION
+CATEDRA: METODOS CUANTITATIVOS / INVESTIGACION DE OPERACIONES II
+INFORME TECNICO Y HOJA DE RESULTADOS - TAREA 6: PROGRAMACION NO LINEAL
+Autores: Roberto Siracusa (C.I. 30.195.953) e Ignacio Acena (C.I. 31.352.123)
+================================================================================
+
+RESUMEN EJECUTIVO DE MODELOS Y CONCLUSIONES:
+  1. Sin restricciones   : x* = 2.0000, y* = 3.0000 ==> Costo Minimo = 7.0000
+  2. Lagrange Rectangulo : x* = 10.0000, y* = 10.0000 ==> Area Maxima = 100.0000 (lambda = 5.0000)
+  3. Gradiente Iterativo : x* = 2.0000, y* = 3.0000 ==> f Maxima = 13.0000 (Convergente)
+  4. KKT Desigualdades   : x* = 21.6667, y* = 18.3333 ==> Ganancia Maxima = 140.8333 (mu1 = 0.6667)
+  5. Cilindro Fisico     : r* = 4.3013 cm, h* = 8.6025 cm ==> Area Minima = 348.7342 cm^2 (h = 2r)
+
+================================================================================
+PROBLEMA 1: PROBLEMA SIN RESTRICCIONES (DERIVADAS PARCIALES)
+================================================================================
+Modelo Matematico:
+  Minimizar C(x, y) = x^2 + y^2 - 4x - 6y + 20
+
+Condiciones de Primer Orden (CPO):
+  dC/dx = 2x - 4 = 0   ==>   x* = 2.0000
+  dC/dy = 2y - 6 = 0   ==>   y* = 3.0000
+
+Condiciones de Segundo Orden (CSO - Matriz Hessiana):
+  H = [[ 2.0,  0.0 ],
+       [ 0.0,  2.0 ]]
+  Menor principal D1 = 2.0000 > 0
+  Determinante det(H) = 4.0000 > 0
+  Clasificacion: minimo global estricto
+
+Resultados Optimos:
+  Variable x* : 2.0000
+  Variable y* : 3.0000
+  Costo Minimo C(x*, y*): 7.0000
+  Forma canonica: C(x, y) = (x - 2)^2 + (y - 3)^2 + 7 >= 7
+
+Conclusion:
+  Para minimizar el costo operativo, la empresa debe establecer los niveles de produccion en x = 2.0000 e y = 3.0000, alcanzando un costo minimo de 7.0000 unidades monetarias. La matriz Hessiana es definida positiva (D1 = 2.00 > 0, det(H) = 4.00 > 0), lo que certifica analiticamente que el punto critico es un minimo global estricto.
+
+================================================================================
+PROBLEMA 2: METODO DE LAGRANGE (RESTRICCION DE IGUALDAD)
+================================================================================
+Modelo Matematico:
+  Maximizar A(x, y) = x * y
+  Sujeto a: 2x + 2y = 40
+
+Lagrangiano:
+  L(x, y, lambda) = x*y - lambda*(2x + 2y - 40)
+
+Condiciones de Primer Orden (CPO):
+  dL/dx = y - 2*lambda = 0       ==>  y = 2*lambda
+  dL/dy = x - 2*lambda = 0       ==>  x = 2*lambda
+  dL/dlambda = -(2x + 2y - 40) = 0 ==>  2(2*lambda) + 2(2*lambda) = 40 ==> lambda* = 5.0000
+
+Condiciones de Segundo Orden (Hessiano Orlado):
+  H_bar = [[ 0,  2,  2 ],
+           [ 2,  0,  1 ],
+           [ 2,  1,  0 ]]
+  det(H_bar) = 8.0000 > 0 ==> Maximo local estricto garantizado
+
+Resultados Optimos:
+  Dimension x* : 10.0000 unidades
+  Dimension y* : 10.0000 unidades (Configuracion: Cuadrado)
+  Area Maxima A(x*, y*): 100.0000 unidades cuadradas
+  Multiplicador lambda*: 5.0000
+  Perimetro verificado : 40.0000 unidades
+  Sensibilidad marginal (dA*/dP): 5.0000
+
+Conclusion:
+  El diseno geometrico que maximiza el area con un perimetro fijo de 40.00 unidades corresponde a una configuracion cuadrada perfecta de lados x = 10.0000 unidades e y = 10.0000 unidades, alcanzando un area maxima de 100.0000 unidades cuadradas. El determinante del Hessiano Orlado es det(H_bar) = 8.00 > 0, certificando un maximo restringido estricto. El multiplicador de Lagrange lambda* = 5.0000 representa el valor marginal (precio sombra): un incremento de 1 unidad en el perimetro disponible aumenta el area maxima en aproximadamente 5.0000 unidades cuadradas.
+
+================================================================================
+PROBLEMA 3: METODO DEL GRADIENTE (BUSQUEDA ITERATIVA)
+================================================================================
+Modelo Matematico:
+  Maximizar f(x, y) = -(x^2 + y^2) + 4x + 6y
+  Punto inicial: (0.0, 0.0)
+  Regla de actualizacion: x_{k+1} = x_k + alfa * grad(f(x_k))
+  Gradiente: grad(f) = [ -2x + 4,  -2y + 6 ]
+
+Tabla de Iteraciones de Ascenso de Gradiente:
+Iter  x         y         f(x, y)     grad_x    grad_y    ||grad||    
+--------------------------------------------------------------------------------
+0     0.0000    0.0000    0.0000      4.0000    6.0000    7.21e+00    
+1     0.4000    0.6000    4.6800      3.2000    4.8000    5.77e+00    
+2     0.7200    1.0800    7.6752      2.5600    3.8400    4.62e+00    
+3     0.9760    1.4640    9.5921      2.0480    3.0720    3.69e+00    
+4     1.1808    1.7712    10.8190     1.6384    2.4576    2.95e+00    
+5     1.3446    2.0170    11.6041     1.3107    1.9661    2.36e+00    
+10    1.7853    2.6779    12.8501     0.4295    0.6442    7.74e-01    
+15    1.9296    2.8944    12.9839     0.1407    0.2111    2.54e-01    
+20    1.9769    2.9654    12.9983     0.0461    0.0692    8.31e-02    
+25    1.9924    2.9887    12.9998     0.0151    0.0227    2.72e-02    
+30    1.9975    2.9963    13.0000     0.0050    0.0074    8.93e-03    
+35    1.9992    2.9988    13.0000     0.0016    0.0024    2.93e-03    
+40    1.9997    2.9996    13.0000     0.0005    0.0008    9.59e-04    
+45    1.9999    2.9999    13.0000     0.0002    0.0003    3.14e-04    
+50    2.0000    3.0000    13.0000     0.0001    0.0001    1.03e-04    
+--------------------------------------------------------------------------------
+
+Resultados Optimos Obtenidos:
+  Punto final (x, y)     : (2.0000, 3.0000)
+  Valor maximo f(x, y)   : 13.0000
+  Iteraciones ejecutadas : 50
+  Norma gradiente final  : 1.03e-04
+  Optimo analitico exacto: (2.0000, 3.0000) con f* = 13.0000
+  Paso optimo analitico  : alfa* = 0.5 (convergencia en 1 iteracion exacta)
+
+Conclusion:
+  El metodo del gradiente partiendo de (0.0, 0.0) con tasa alfa = 0.1000 convergio en 50 iteraciones a las coordenadas x = 2.0000, y = 3.0000, con un valor de funcion f(x, y) = 13.0000 y norma de gradiente ||grad|| = 1.03e-04. El resultado coincide con el optimo teorico global (x* = 2, y* = 3, f* = 13.0) con un error absoluto menor a 4.28e-05.
+
+================================================================================
+PROBLEMA 4: PROBLEMA CON MULTIPLES RESTRICCIONES (CONDICIONES KKT)
+================================================================================
+Modelo Matematico:
+  Maximizar G(x, y) = 5x + 8y - 0.1x^2 - 0.2y^2
+  Sujeto a:
+    g1(x, y) = x + y - 40 <= 0
+    g2(x, y) = -x <= 0
+    g3(x, y) = -y <= 0
+
+Diagnostico de Factibilidad sin restricciones:
+  Optimo no restringido : (25.00, 20.00)
+  Suma x + y            : 45.00 > 40.00 (Infactible en el dominio)
+  Estado de restriccion : x + y = 40.0 (frontera activa)
+
+Sistema Karush-Kuhn-Tucker (KKT):
+  Estacionariedad:
+    5 - 0.2x - mu1 = 0   ==>  mu1 = 5 - 0.2x
+    8 - 0.4y - mu1 = 0   ==>  mu1 = 8 - 0.4y
+  Activacion de frontera:
+    x + y = 40           ==>  y = 40 - x
+  Resolviendo:
+    5 - 0.2x = 8 - 0.4(40 - x) ==> 0.6x = 13 ==> x* = 65/3 = 21.6667
+    y* = 40 - 65/3 = 55/3 = 18.3333
+    mu1 = 5 - 0.2(65/3) = 2/3 = 0.6667 > 0
+
+Resultados Optimos:
+  Variable x* : 21.6667 (Exacto: 65/3)
+  Variable y* : 18.3333 (Exacto: 55/3)
+  Ganancia Maxima G(x*, y*): 140.8333 (Exacto: 845/6)
+  Multiplicador mu1 (Capacidad): 0.6667 (Exacto: 2/3)
+  Multiplicadores mu2 (x>=0)   : 0.0000 (Holgura estricta)
+  Multiplicadores mu3 (y>=0)   : 0.0000 (Holgura estricta)
+  Sensibilidad marginal (dG*/dB): 0.6667
+
+Conclusion:
+  El optimo sin restricciones se ubica en (25.00, 20.00) con una suma de 45.00 > 40.00, lo cual es infactible. En consecuencia, la restriccion de capacidad conjunta x + y <= 40.0 se activa plenamente en el optimo. Resolviendo el sistema Karush-Kuhn-Tucker (KKT), las cantidades optimas a producir son x* = 21.6667 (65/3) e y* = 18.3333 (55/3), generando una ganancia maxima de 140.8333 (845/6 = 140.8333 unidades monetarias). El multiplicador de Lagrange asociado a la capacidad es mu1 = 0.6667 (2/3 > 0), el cual representa el precio sombra de la restriccion: un aumento de 1 unidad en la capacidad conjunta incrementara la ganancia maxima en aproximadamente 0.6667 unidades monetarias.
+
+================================================================================
+PROBLEMA 5: PROBLEMA DE VOLUMEN MINIMO (DIMENSIONAMIENTO FISICO DE CILINDRO)
+================================================================================
+Modelo Matematico:
+  Minimizar Area Superficial A(r, h) = 2*pi*r^2 + 2*pi*r*h
+  Sujeto a: V(r, h) = pi*r^2*h = 500 cm^3
+
+Reduccion Unidimensional y Derivadas:
+  h(r) = 500 / (pi * r^2)
+  A(r) = 2*pi*r^2 + 1000 / r
+  A'(r) = 4*pi*r - 1000 / r^2 = 0  ==>  r* = cbrt(250 / pi)
+  h* = 500 / (pi * (r*)^2) = 2 * r*
+  A''(r*) = 37.6991 > 0 ==> Minimo global certificado
+
+Resultados Optimos:
+  Radio optimo (r*)    : 4.3013 cm
+  Altura optima (h*)   : 8.6025 cm
+  Diametro optimo (d*) : 8.6025 cm
+  Relacion geometrica  : h = 2r (altura igual al diametro)
+  Area Superficial Min.: 348.7342 cm^2
+  Volumen verificado   : 500.0000 cm^3
+  Multiplicador lambda : 0.4650 cm^(-1)
+  Sensibilidad (dA*/dV): 0.4650 cm^2 / cm^3
+
+Conclusion:
+  Para un volumen fijo de V = 500.00 cm^3 (Cilindro cerrado (con 2 tapas circulares)), el diseno que minimiza el area superficial requiere una relacion geometrica de h = 2r (altura igual al diametro). Las dimensiones optimas son radio r* = 4.3013 cm y altura h* = 8.6025 cm (diametro d* = 8.6025 cm), resultando en un area superficial minima de 348.7342 cm^2. La segunda derivada A''(r*) = 37.6991 > 0 ratifica matematicamente un minimo global estricto. El multiplicador de Lagrange lambda* = 0.4650 cm^(-1) representa la sensibilidad marginal: un aumento de 1 cm^3 en el volumen requerido expandira el area minima en aproximadamente 0.4650 cm^2.
+
+================================================================================
+FIN DEL INFORME TECNICO - TAREA 6
+================================================================================
